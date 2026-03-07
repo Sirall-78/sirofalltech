@@ -462,3 +462,125 @@ animate();
 
 </body>
 </html>
+<!-- INICIO: AGREGAR ESTO DENTRO DE <body> DESPUÉS DEL POPUP EXISTENTE -->
+
+<!-- Popup de ingreso de código -->
+<div class="popup" id="codePopup">
+  <div class="popupHeader">
+    <b>Ingresar código de acceso</b>
+    <div class="closeBtn" onclick="closeCodePopup()">✕</div>
+  </div>
+  <input type="text" id="accessCode" placeholder="Escribe tu código..." maxlength="10" style="width:100%;padding:10px;margin-top:10px;font-size:16px;">
+  <button onclick="submitCode()" style="margin-top:10px;padding:10px 20px;cursor:pointer;background:#00c8ff;color:black;border:none;font-weight:bold;">Ingresar</button>
+  <div id="codeMessage" style="margin-top:15px;"></div>
+</div>
+
+<!-- Popup de interfaz de usuario -->
+<div class="popup" id="userInterface" style="width:500px;max-width:90%;">
+  <div class="popupHeader">
+    <b id="uiTitle">Bienvenido</b>
+    <div class="closeBtn" onclick="closeUserInterface()">✕</div>
+  </div>
+  <div id="uiContent" style="margin-top:10px;font-size:16px;"></div>
+</div>
+
+<script>
+
+// Lista de palabras ofensivas simples (puedes ampliar)
+const bannedWords = ["fuck","shit","bitch","ass","pendejo","idiota","mierda","culo","cabron"," gay"," vrg"," v" ];
+
+// Abrir popup al tocar "Sesión"
+function openSessionPopup(){
+  closePopup(); // cierra el popup anterior si está abierto
+  document.getElementById("codePopup").classList.add("show");
+  document.getElementById("accessCode").value="";
+  document.getElementById("codeMessage").innerHTML="";
+}
+
+// Cerrar popup de código
+function closeCodePopup(){
+  document.getElementById("codePopup").classList.remove("show");
+}
+
+// Cerrar popup de interfaz de usuario
+function closeUserInterface(){
+  document.getElementById("userInterface").classList.remove("show");
+}
+
+// Función para validar código
+function submitCode(){
+  let code = document.getElementById("accessCode").value.trim();
+  let msg = document.getElementById("codeMessage");
+
+  if(code==="67067"){
+    // Código especial 67067
+    openUserInterface("Belman","Belman Bienvenido a Sir Of All Tec.","Próximamente podrás tener acceso a más funciones de desarrollador.");
+    closeCodePopup();
+  } else if(code==="52370"){
+    // Código que pide nombre clave
+    let userName = prompt("Ingresa tu nombre clave (máx 10 letras)").trim();
+    if(!userName){
+      msg.innerHTML = "Debes ingresar un nombre válido.";
+      return;
+    }
+    if(userName.length>10){
+      msg.innerHTML = "Nombre demasiado largo.";
+      return;
+    }
+    // filtro simple
+    let lowerName = userName.toLowerCase();
+    for(let word of bannedWords){
+      if(lowerName.includes(word)){
+        msg.innerHTML = "Nombre no permitido.";
+        return;
+      }
+    }
+    openUserInterface(userName,Bienvenid@ ${userName} a Sir Of All Tec.,"Próximamente podrás acceder a nuevas funciones.");
+    closeCodePopup();
+  } else if(code==="07811"){
+    // Opciones de CEO / empleado
+    let choice = prompt("Elige modo: 'CEO' o 'Empleado'").trim().toLowerCase();
+    if(choice==="empleado"){
+      openUserInterface("Aldo"," Aldo Bienvenido a Sir Of All Tec.","Próximamente podrás acceder a funciones de desarrollador.");
+      closeCodePopup();
+    } else if(choice==="ceo"){
+      let ceoPass = prompt("Ingresa contraseña de CEO:");
+      if(ceoPass==="lordall78"){
+        // Interfaz CEO avanzada
+        openUserInterface("Aldo (CEO)","Aldo Bienvenido, CEO de Sir Of All Tec.","Interfaz de administrador: aquí podrás gestionar usuarios, proyectos y más.");
+        closeCodePopup();
+      } else {
+        msg.innerHTML = "Contraseña incorrecta.";
+      }
+    } else {
+      msg.innerHTML = "Opción inválida.";
+    }
+  } else {
+    msg.innerHTML = "Código incorrecto.";
+  }
+}
+
+// Función para abrir popup de interfaz
+function openUserInterface(name,title,message){
+  let ui=document.getElementById("userInterface");
+  document.getElementById("uiTitle").innerText=title;
+  document.getElementById("uiContent").innerHTML="";
+  ui.classList.add("show");
+
+  // efecto typing
+  let i=0;
+  let interval=setInterval(()=>{
+    document.getElementById("uiContent").innerHTML += message.charAt(i);
+    i++;
+    if(i>=message.length) clearInterval(interval);
+  },35);
+}
+
+// Vincular "Sesión" del menú
+document.querySelectorAll(".menu a").forEach(el=>{
+  if(el.innerText.toLowerCase().includes("sesión")){
+    el.addEventListener("click", openSessionPopup);
+  }
+});
+
+</script>
