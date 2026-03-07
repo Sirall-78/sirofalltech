@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
 <meta charset="UTF-8">
 <title>Sir Of All Tec</title>
@@ -15,6 +14,7 @@ font-family:'Orbitron',sans-serif;
 background:#030712;
 color:white;
 overflow:hidden;
+transition:0.4s;
 }
 
 /* HERO */
@@ -40,13 +40,27 @@ margin-top:10px;
 .mainLogo{
 width:180px;
 margin-top:20px;
-filter:drop-shadow(0 0 10px #00c8ff);
+filter:drop-shadow(0 0 15px #00c8ff);
 animation:glow 3s infinite alternate;
 }
 
 @keyframes glow{
-0%{filter:drop-shadow(0 0 10px #00c8ff);}
-100%{filter:drop-shadow(0 0 35px #00ffff);}
+
+0%{
+filter:drop-shadow(0 0 10px #00c8ff);
+transform:scale(1);
+}
+
+50%{
+filter:drop-shadow(0 0 40px #00ffff);
+transform:scale(1.05);
+}
+
+100%{
+filter:drop-shadow(0 0 10px #00c8ff);
+transform:scale(1);
+}
+
 }
 
 .coming{
@@ -54,12 +68,400 @@ margin-top:15px;
 font-size:20px;
 }
 
-/* BOTON MENU */
+/* MENU BOTON */
 
 .menuBtn{
 position:fixed;
 right:25px;
 top:25px;
+cursor:pointer;
+z-index:5;
+}
+
+.menuBtn div{
+width:30px;
+height:3px;
+background:#00c8ff;
+margin:6px 0;
+transition:0.3s;
+}
+
+.menuBtn.active div:nth-child(1){
+transform:rotate(45deg) translate(5px,5px);
+}
+
+.menuBtn.active div:nth-child(2){
+opacity:0;
+}
+
+.menuBtn.active div:nth-child(3){
+transform:rotate(-45deg) translate(6px,-6px);
+}
+
+/* MENU */
+
+.menu{
+position:fixed;
+right:-260px;
+top:0;
+width:260px;
+height:100%;
+background:#020617;
+padding-top:100px;
+transition:0.4s;
+z-index:4;
+}
+
+.menu a{
+display:block;
+padding:20px;
+text-decoration:none;
+color:white;
+border-bottom:1px solid rgba(255,255,255,0.1);
+cursor:pointer;
+}
+
+.menu a:hover{
+background:#00c8ff;
+color:black;
+}
+
+.menu.active{
+right:0;
+}
+
+/* POPUP */
+
+.popup{
+
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+
+width:320px;
+max-width:80%;
+
+background:#020617;
+border:1px solid #00c8ff;
+border-radius:10px;
+
+padding:20px;
+
+display:none;
+
+z-index:6;
+
+cursor:move;
+
+}
+
+.popup.show{
+display:block;
+}
+
+.popupHeader{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
+}
+
+.closeBtn{
+cursor:pointer;
+color:#00c8ff;
+font-size:18px;
+}
+
+/* MODO ROJO */
+
+.redMode{
+background:#0b0000;
+}
+
+.redMode .menuBtn div{
+background:#ff4040;
+}
+
+.redMode .menu a:hover{
+background:#ff3030;
+color:white;
+}
+
+.redMode .popup{
+border:1px solid #ff3030;
+}
+
+.redMode .mainLogo{
+filter:drop-shadow(0 0 25px #ff3030);
+}
+
+/* CANVAS */
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+}
+
+/* FOOTER */
+
+footer{
+position:fixed;
+bottom:40px;
+width:100%;
+text-align:center;
+opacity:0.6;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="menuBtn" onclick="toggleMenu()" id="menuBtn">
+<div></div>
+<div></div>
+<div></div>
+</div>
+
+<div class="menu" id="menu">
+
+<a onclick="future()">Inicio</a>
+<a onclick="future()">Sesión</a>
+<a onclick="future()">Tecnología</a>
+<a onclick="future()">Proyectos</a>
+<a onclick="future()">Contacto</a>
+<a onclick="toggleMode()">Modo Sistema</a>
+
+</div>
+
+<div class="popup" id="popup">
+
+<div class="popupHeader">
+
+<b>Estado del sistema</b>
+
+<div class="closeBtn" onclick="closePopup()">✕</div>
+
+</div>
+
+<div id="typing"></div>
+
+</div>
+
+<canvas id="bg"></canvas>
+
+<div class="hero">
+
+<h1>Hola, bienvenido a</h1>
+<h2>Sir Of All Tec</h2>
+
+<img src="logo.png" class="mainLogo">
+
+<div class="coming">
+Próximamente
+</div>
+
+</div>
+
+<footer>
+© SIROFALLTECH
+</footer>
+
+<script>
+
+/* MENU */
+
+function toggleMenu(){
+
+document.getElementById("menu").classList.toggle("active");
+document.getElementById("menuBtn").classList.toggle("active");
+
+}
+
+/* POPUP */
+
+function future(){
+
+let popup=document.getElementById("popup");
+let text=document.getElementById("typing");
+
+popup.classList.add("show");
+
+let message="Esta sección se encuentra en desarrollo... Próximamente disponible.";
+
+text.innerHTML="";
+let i=0;
+
+let typing=setInterval(()=>{
+
+text.innerHTML+=message[i];
+i++;
+
+if(i>=message.length) clearInterval(typing);
+
+},35);
+
+}
+
+function closePopup(){
+document.getElementById("popup").classList.remove("show");
+}
+
+/* POPUP ARRASTRABLE */
+
+let popup=document.getElementById("popup");
+
+let offsetX=0;
+let offsetY=0;
+let isDown=false;
+
+popup.addEventListener("mousedown",e=>{
+
+isDown=true;
+
+offsetX=e.clientX-popup.offsetLeft;
+offsetY=e.clientY-popup.offsetTop;
+
+});
+
+document.addEventListener("mouseup",()=>{
+
+isDown=false;
+
+});
+
+document.addEventListener("mousemove",e=>{
+
+if(!isDown) return;
+
+popup.style.left=(e.clientX-offsetX)+"px";
+popup.style.top=(e.clientY-offsetY)+"px";
+
+popup.style.transform="none";
+
+});
+
+/* MODO */
+
+let mode="blue";
+
+function toggleMode(){
+
+if(mode==="blue"){
+
+mode="red";
+document.body.classList.add("redMode");
+
+}else{
+
+mode="blue";
+document.body.classList.remove("redMode");
+
+}
+
+}
+
+/* FONDO TECNOLOGICO */
+
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
+
+function resize(){
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+createNodes();
+
+}
+
+window.addEventListener("resize",resize);
+
+let nodes=[];
+
+function createNodes(){
+
+nodes=[];
+
+let density=(canvas.width*canvas.height)/4500;
+
+for(let i=0;i<density;i++){
+
+nodes.push({
+
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+vx:(Math.random()-0.5)*0.5,
+vy:(Math.random()-0.5)*0.5
+
+});
+
+}
+
+}
+
+resize();
+
+function animate(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+nodes.forEach(n=>{
+
+n.x+=n.vx;
+n.y+=n.vy;
+
+if(n.x<0||n.x>canvas.width) n.vx*=-1;
+if(n.y<0||n.y>canvas.height) n.vy*=-1;
+
+ctx.beginPath();
+ctx.arc(n.x,n.y,2,0,Math.PI*2);
+ctx.fillStyle=mode==="red" ? "#ff4040" : "#00c8ff";
+ctx.fill();
+
+nodes.forEach(n2=>{
+
+let dx=n.x-n2.x;
+let dy=n.y-n2.y;
+
+let dist=Math.sqrt(dx*dx+dy*dy);
+
+if(dist<180){
+
+let depth=1-(dist/180);
+
+ctx.beginPath();
+ctx.moveTo(n.x,n.y);
+ctx.lineTo(n2.x,n2.y);
+
+ctx.strokeStyle=mode==="red"
+? "rgba(255,60,60,"+depth+")"
+: "rgba(0,200,255,"+depth+")";
+
+ctx.lineWidth=depth*2;
+
+ctx.stroke();
+
+}
+
+});
+
+});
+
+requestAnimationFrame(animate);
+
+}
+
+animate();
+
+</script>
+
+</body>
+</html>top:25px;
 cursor:pointer;
 z-index:5;
 }
