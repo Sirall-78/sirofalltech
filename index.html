@@ -117,7 +117,7 @@ background:#ff4040;
 filter:drop-shadow(0 0 25px #ff3030);
 }
 
-/* PANEL SISTEMA */
+/* PANEL LATERAL */
 
 .systemPanel{
 
@@ -126,6 +126,29 @@ left:0;
 top:0;
 height:100%;
 width:260px;
+background:#020617;
+padding:20px;
+display:none;
+
+}
+
+.systemPanel.show{
+display:block;
+}
+
+.systemPanel p{
+font-size:14px;
+}
+
+/* CEO DASHBOARD */
+
+.ceoPanel{
+
+position:fixed;
+right:0;
+top:0;
+height:100%;
+width:350px;
 
 background:#020617;
 
@@ -135,15 +158,29 @@ display:none;
 
 }
 
-.systemPanel.show{
+.ceoPanel.show{
 display:block;
 }
 
-.systemPanel button{
+.ceoBtn{
+
+display:block;
 width:100%;
-margin-top:10px;
 padding:10px;
+margin-top:10px;
+background:#ff4040;
+border:none;
+color:white;
 cursor:pointer;
+
+}
+
+.ceoOutput{
+
+margin-top:20px;
+padding:10px;
+border:1px solid #ff4040;
+
 }
 
 /* POPUP */
@@ -217,6 +254,27 @@ opacity:0.6;
 
 </div>
 
+<div class="ceoPanel" id="ceoPanel">
+
+<h3>Panel CEO</h3>
+
+<button class="ceoBtn" onclick="ceoAction('servidores')">Estado de servidores</button>
+<button class="ceoBtn" onclick="ceoAction('empleados')">Gestión de empleados</button>
+<button class="ceoBtn" onclick="ceoAction('innovacion')">Centro de innovación</button>
+<button class="ceoBtn" onclick="ceoAction('seguridad')">Seguridad del sistema</button>
+<button class="ceoBtn" onclick="ceoAction('proyectos')">Control de proyectos</button>
+<button class="ceoBtn" onclick="ceoAction('red')">Red global</button>
+
+<div class="ceoOutput" id="ceoOutput">
+
+Sistema CEO activo.
+
+</div>
+
+<button class="ceoBtn" onclick="logout()">Cambiar de cuenta</button>
+
+</div>
+
 <div class="popup" id="login">
 
 <h3>Ingresa código</h3>
@@ -250,13 +308,13 @@ Próximamente
 
 <script>
 
-let system=false;
-
 /* MENU */
 
 function toggleMenu(){
 document.getElementById("menu").classList.toggle("active");
 }
+
+let system=false;
 
 /* MODO SISTEMA */
 
@@ -265,13 +323,9 @@ function toggleMode(){
 system=!system;
 
 if(system){
-
 document.body.classList.add("redMode");
-
 }else{
-
 document.body.classList.remove("redMode");
-
 }
 
 }
@@ -282,7 +336,7 @@ function openSession(){
 
 if(!system){
 
-alert("Activa primero el modo sistema");
+alert("Activa primero el modo sistema.");
 
 return;
 
@@ -308,13 +362,6 @@ else if(code==="52370"){
 
 let name=prompt("Nombre clave (máx 10)");
 
-if(!name || name.length>10){
-
-alert("Nombre inválido");
-return;
-
-}
-
 startSession(name);
 
 }
@@ -331,7 +378,7 @@ startSession("Aldo");
 
 else if(pass==="lordall78"){
 
-startSession("Aldo — CEO");
+startSession("CEO");
 
 }
 
@@ -345,15 +392,73 @@ alert("Contraseña incorrecta");
 
 }
 
-/* INICIAR SESION */
+/* SESION */
 
 function startSession(user){
 
-alert("Bienvenido al sistema interno de Sir Of All Tec.\nSesión iniciada correctamente.");
+if(user==="Belman"){
+
+alert("Belman, bienvenido al sistema interno de Sir Of All Tec.\nTu sesión ha sido iniciada correctamente.");
+
+}
+
+else if(user==="Aldo"){
+
+alert("Bienvenido Aldo al sistema interno de Sir Of All Tec.\nSesión de empleado iniciada.");
+
+}
+
+else if(user==="CEO"){
+
+alert("Bienvenido Aldo.\nAcceso ejecutivo autorizado.");
+
+document.getElementById("ceoPanel").classList.add("show");
+
+return;
+
+}
+
+else{
+
+alert("Bienvenido "+user+" al sistema interno de Sir Of All Tec.");
+
+}
+
+document.getElementById("systemPanel").classList.add("show");
 
 document.getElementById("login").classList.remove("show");
 
-document.getElementById("systemPanel").classList.add("show");
+}
+
+/* CEO INTERACCION */
+
+function ceoAction(type){
+
+let out=document.getElementById("ceoOutput");
+
+if(type==="servidores"){
+out.innerHTML="Estado de servidores: estable.<br>Expansión global próximamente.";
+}
+
+if(type==="empleados"){
+out.innerHTML="Sistema de gestión de empleados en desarrollo.";
+}
+
+if(type==="innovacion"){
+out.innerHTML="Centro de innovación tecnológica en desarrollo.";
+}
+
+if(type==="seguridad"){
+out.innerHTML="Sistema de seguridad avanzada en desarrollo.";
+}
+
+if(type==="proyectos"){
+out.innerHTML="Panel de control de proyectos próximamente.";
+}
+
+if(type==="red"){
+out.innerHTML="Red global de servidores en expansión.";
+}
 
 }
 
@@ -362,7 +467,7 @@ document.getElementById("systemPanel").classList.add("show");
 function logout(){
 
 document.getElementById("systemPanel").classList.remove("show");
-
+document.getElementById("ceoPanel").classList.remove("show");
 document.getElementById("login").classList.add("show");
 
 }
@@ -459,6 +564,10 @@ requestAnimationFrame(animate);
 }
 
 animate();
+
+function future(){
+alert("Sección en desarrollo.");
+}
 
 </script>
 
