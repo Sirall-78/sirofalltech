@@ -28,14 +28,8 @@ align-items:center;
 text-align:center;
 }
 
-.hero h1{
-font-size:38px;
-}
-
-.hero h2{
-font-size:30px;
-margin-top:10px;
-}
+.hero h1{font-size:38px;}
+.hero h2{font-size:30px;margin-top:10px;}
 
 .mainLogo{
 width:180px;
@@ -45,28 +39,12 @@ animation:glow 3s infinite alternate;
 }
 
 @keyframes glow{
-
-0%{
-filter:drop-shadow(0 0 10px #00c8ff);
-transform:scale(1);
+0%{filter:drop-shadow(0 0 10px #00c8ff);transform:scale(1);}
+50%{filter:drop-shadow(0 0 40px #00ffff);transform:scale(1.05);}
+100%{filter:drop-shadow(0 0 10px #00c8ff);transform:scale(1);}
 }
 
-50%{
-filter:drop-shadow(0 0 40px #00ffff);
-transform:scale(1.05);
-}
-
-100%{
-filter:drop-shadow(0 0 10px #00c8ff);
-transform:scale(1);
-}
-
-}
-
-.coming{
-margin-top:15px;
-font-size:20px;
-}
+.coming{margin-top:15px;font-size:20px;}
 
 /* MENU BOTON */
 
@@ -133,27 +111,19 @@ right:0;
 /* POPUP */
 
 .popup{
-
 position:fixed;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
-
 width:320px;
 max-width:80%;
-
 background:#020617;
 border:1px solid #00c8ff;
 border-radius:10px;
-
 padding:20px;
-
 display:none;
-
 z-index:6;
-
 cursor:move;
-
 }
 
 .popup.show{
@@ -216,7 +186,6 @@ opacity:0.6;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -228,54 +197,22 @@ opacity:0.6;
 </div>
 
 <div class="menu" id="menu">
-
 <a onclick="future()">Inicio</a>
 <a onclick="openSessionPopup()">Sesión</a>
 <a onclick="future()">Tecnología</a>
 <a onclick="future()">Proyectos</a>
 <a onclick="future()">Contacto</a>
 <a onclick="toggleMode()">Modo Sistema</a>
-
 </div>
 
 <div class="popup" id="popup">
 
 <div class="popupHeader">
-
 <b>Estado del sistema</b>
-
 <div class="closeBtn" onclick="closePopup()">✕</div>
-
 </div>
 
 <div id="typing"></div>
-
-</div>
-
-<!-- POPUP CODIGO -->
-
-<div class="popup" id="codePopup">
-<div class="popupHeader">
-<b>Ingresar código de acceso</b>
-<div class="closeBtn" onclick="closeCodePopup()">✕</div>
-</div>
-
-<input type="text" id="accessCode" placeholder="Escribe tu código..." maxlength="10" style="width:100%;padding:10px;margin-top:10px;font-size:16px;">
-<button onclick="submitCode()" style="margin-top:10px;padding:10px 20px;cursor:pointer;background:#00c8ff;color:black;border:none;font-weight:bold;">Ingresar</button>
-
-<div id="codeMessage" style="margin-top:15px;"></div>
-</div>
-
-<!-- INTERFAZ USUARIO -->
-
-<div class="popup" id="userInterface" style="width:500px;max-width:90%;">
-
-<div class="popupHeader">
-<b id="uiTitle">Bienvenido</b>
-<div class="closeBtn" onclick="closeUserInterface()">✕</div>
-</div>
-
-<div id="uiContent" style="margin-top:10px;font-size:16px;"></div>
 
 </div>
 
@@ -298,163 +235,224 @@ Próximamente
 © SIROFALLTECH
 </footer>
 
+<!-- Popup de código -->
+
+<div class="popup" id="codePopup">
+<div class="popupHeader">
+<b>Ingresar código de acceso</b>
+<div class="closeBtn" onclick="closeCodePopup()">✕</div>
+</div>
+
+<input type="text" id="accessCode" placeholder="Escribe tu código..." maxlength="10" style="width:100%;padding:10px;margin-top:10px;font-size:16px;">
+
+<button onclick="submitCode()" style="margin-top:10px;padding:10px 20px;cursor:pointer;background:#00c8ff;color:black;border:none;font-weight:bold;">
+Ingresar
+</button>
+
+<div id="codeMessage" style="margin-top:15px;"></div>
+</div>
+
+<!-- Popup interfaz -->
+
+<div class="popup" id="userInterface" style="width:500px;max-width:90%;">
+<div class="popupHeader">
+<b id="uiTitle">Bienvenido</b>
+<div class="closeBtn" onclick="closeUserInterface()">✕</div>
+</div>
+<div id="uiContent" style="margin-top:10px;font-size:16px;"></div>
+</div>
+
 <script>
-
-/* VARIABLES */
-
-let mode="blue"
-let systemMode=false
 
 /* MENU */
 
 function toggleMenu(){
-document.getElementById("menu").classList.toggle("active")
-document.getElementById("menuBtn").classList.toggle("active")
+document.getElementById("menu").classList.toggle("active");
+document.getElementById("menuBtn").classList.toggle("active");
 }
 
 /* POPUP */
 
 function future(){
 
-let popup=document.getElementById("popup")
-let text=document.getElementById("typing")
+let popup=document.getElementById("popup");
+let text=document.getElementById("typing");
 
-popup.classList.add("show")
+popup.classList.add("show");
 
-let message="Esta sección se encuentra en desarrollo... Próximamente disponible."
+let message="Esta sección se encuentra en desarrollo... Próximamente disponible.";
 
-text.innerHTML=""
-let i=0
+text.innerHTML="";
+let i=0;
 
 let typing=setInterval(()=>{
-
-text.innerHTML+=message[i]
-i++
-
-if(i>=message.length) clearInterval(typing)
-
-},35)
+text.innerHTML+=message[i];
+i++;
+if(i>=message.length) clearInterval(typing);
+},35);
 
 }
 
 function closePopup(){
-document.getElementById("popup").classList.remove("show")
+document.getElementById("popup").classList.remove("show");
 }
 
 /* MODO */
+
+let mode="blue";
+let systemMode=false;
 
 function toggleMode(){
 
 if(mode==="blue"){
 
-mode="red"
-systemMode=true
-document.body.classList.add("redMode")
+mode="red";
+systemMode=true;
+document.body.classList.add("redMode");
 
 }else{
 
-mode="blue"
-systemMode=false
-document.body.classList.remove("redMode")
+mode="blue";
+systemMode=false;
+document.body.classList.remove("redMode");
 
 }
 
 }
 
-/* ABRIR SESION */
+/* ABRIR SESION SOLO CON MODO SISTEMA */
 
 function openSessionPopup(){
 
 if(!systemMode){
 
-future()
-return
+future();
+return;
 
 }
 
-document.getElementById("codePopup").classList.add("show")
+closePopup();
+
+document.getElementById("codePopup").classList.add("show");
+document.getElementById("accessCode").value="";
+document.getElementById("codeMessage").innerHTML="";
+
 }
 
 function closeCodePopup(){
-document.getElementById("codePopup").classList.remove("show")
+document.getElementById("codePopup").classList.remove("show");
 }
 
 function closeUserInterface(){
-document.getElementById("userInterface").classList.remove("show")
+document.getElementById("userInterface").classList.remove("show");
 }
 
-/* CODIGOS */
+/* LISTA PALABRAS */
 
-const bannedWords=["fuck","shit","bitch","ass","pendejo","idiota","mierda","culo","cabron","gay","vrg"]
+const bannedWords=["fuck","shit","bitch","ass","pendejo","idiota","mierda","culo","cabron"," gay"," vrg"," v"];
+
+/* VALIDAR CODIGO */
 
 function submitCode(){
 
-let code=document.getElementById("accessCode").value.trim()
-let msg=document.getElementById("codeMessage")
+let code=document.getElementById("accessCode").value.trim();
+let msg=document.getElementById("codeMessage");
 
 if(code==="67067"){
 
-openUserInterface("Belman","Belman Bienvenido a Sir Of All Tec.","Próximamente podras acceder a mas funciones no oldides tu codigo. En caso de querer un cambio de codigo manda un correo al sirofalltec@gamail.com")
-closeCodePopup()
+openUserInterface(
+"Belman",
+"Belman Bienvenido a Sir Of All Tec.",
+"Próximamente podras acceder a mas funciones no oldides tu codigo. En caso de querer un cambio de codigo manda un correo al sirofalltec@gamail.com"
+);
+
+closeCodePopup();
 
 }
 
 else if(code==="52370"){
 
-let userName=prompt("Ingresa tu nombre clave (máx 10 letras)")
+let userName=prompt("Ingresa tu nombre clave (máx 10 letras)");
 
-if(!userName) return
+if(!userName){
+msg.innerHTML="Debes ingresar un nombre válido.";
+return;
+}
 
-userName=userName.trim()
+userName=userName.trim();
 
 if(userName.length>10){
-msg.innerHTML="Nombre demasiado largo."
-return
+msg.innerHTML="Nombre demasiado largo.";
+return;
 }
 
-let lowerName=userName.toLowerCase()
+let lowerName=userName.toLowerCase();
 
 for(let word of bannedWords){
+
 if(lowerName.includes(word)){
-msg.innerHTML="Nombre no permitido."
-return
-}
+msg.innerHTML="Nombre no permitido.";
+return;
 }
 
-openUserInterface(userName,`Bienvenid@ ${userName} a Sir Of All Tec.`,"Próximamente podrás acceder a nuevas funciones mas de forma limitada.")
-closeCodePopup()
+}
+
+openUserInterface(
+userName,
+`Bienvenid@ ${userName} a Sir Of All Tec.`,
+"Próximamente podrás acceder a nuevas funciones mas de forma limitada."
+);
+
+closeCodePopup();
 
 }
 
 else if(code==="07811"){
 
-let choice=prompt("Elige modo: 'CEO' o 'Empleado'")
+let choice=prompt("Elige modo: 'CEO' o 'Empleado'");
 
-if(!choice) return
+if(!choice){
+msg.innerHTML="Opción inválida.";
+return;
+}
 
-choice=choice.trim().toLowerCase()
+choice=choice.trim().toLowerCase();
 
 if(choice==="empleado"){
 
-openUserInterface("Aldo"," Aldo Bienvenido a Sir Of All Tec.","Próximamente podrás acceder a funciones de desarrollador.")
-closeCodePopup()
+openUserInterface(
+"Aldo",
+" Aldo Bienvenido a Sir Of All Tec.",
+"Próximamente podrás acceder a funciones de desarrollador."
+);
+
+closeCodePopup();
 
 }
 
 else if(choice==="ceo"){
 
-let ceoPass=prompt("Ingresa contraseña de CEO:")
+let ceoPass=prompt("Ingresa contraseña de CEO:");
 
 if(ceoPass==="lordall78"){
 
-openUserInterface("Aldo (CEO)","Aldo Bienvenido, CEO de Sir Of All Tec.","Interfaz de administrador: aquí podrás gestionar usuarios, proyectos y más. Tendras acceso a mas cosas en un futuro")
-closeCodePopup()
+openUserInterface(
+"Aldo (CEO)",
+"Aldo Bienvenido, CEO de Sir Of All Tec.",
+"Interfaz de administrador: aquí podrás gestionar usuarios, proyectos y más. Tendras acceso a mas cosas en un futuro"
+);
+
+closeCodePopup();
 
 }else{
 
-msg.innerHTML="Contraseña incorrecta."
+msg.innerHTML="Contraseña incorrecta.";
 
 }
+
+}else{
+
+msg.innerHTML="Opción inválida.";
 
 }
 
@@ -462,34 +460,95 @@ msg.innerHTML="Contraseña incorrecta."
 
 else{
 
-msg.innerHTML="Código incorrecto."
+msg.innerHTML="Código incorrecto.";
 
 }
 
 }
+
+/* INTERFAZ */
 
 function openUserInterface(name,title,message){
 
-let ui=document.getElementById("userInterface")
+let ui=document.getElementById("userInterface");
 
-document.getElementById("uiTitle").innerText=title
-document.getElementById("uiContent").innerHTML=""
+document.getElementById("uiTitle").innerText=title;
+document.getElementById("uiContent").innerHTML="";
 
-ui.classList.add("show")
+ui.classList.add("show");
 
-let i=0
+let i=0;
 
 let interval=setInterval(()=>{
 
-document.getElementById("uiContent").innerHTML+=message.charAt(i)
+document.getElementById("uiContent").innerHTML+=message.charAt(i);
+i++;
 
-i++
+if(i>=message.length) clearInterval(interval);
 
-if(i>=message.length) clearInterval(interval)
-
-},35)
+},35);
 
 }
+
+/* FONDO */
+
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
+
+function resize(){
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+createNodes();
+}
+
+window.addEventListener("resize",resize);
+
+let nodes=[];
+
+function createNodes(){
+
+nodes=[];
+let density=(canvas.width*canvas.height)/4500;
+
+for(let i=0;i<density;i++){
+
+nodes.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+vx:(Math.random()-0.5)*0.5,
+vy:(Math.random()-0.5)*0.5
+});
+
+}
+
+}
+
+resize();
+
+function animate(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+nodes.forEach(n=>{
+
+n.x+=n.vx;
+n.y+=n.vy;
+
+if(n.x<0||n.x>canvas.width) n.vx*=-1;
+if(n.y<0||n.y>canvas.height) n.vy*=-1;
+
+ctx.beginPath();
+ctx.arc(n.x,n.y,2,0,Math.PI*2);
+ctx.fillStyle=mode==="red" ? "#ff4040" : "#00c8ff";
+ctx.fill();
+
+});
+
+requestAnimationFrame(animate);
+
+}
+
+animate();
 
 </script>
 
