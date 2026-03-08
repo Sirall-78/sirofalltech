@@ -46,9 +46,9 @@ animation:glow 3s infinite alternate;
 
 @keyframes glow{
 
-0%{filter:drop-shadow(0 0 10px #00c8ff);transform:scale(1);}
-50%{filter:drop-shadow(0 0 40px #00ffff);transform:scale(1.05);}
-100%{filter:drop-shadow(0 0 10px #00c8ff);transform:scale(1);}
+0%{filter:drop-shadow(0 0 10px #00c8ff);}
+50%{filter:drop-shadow(0 0 40px #00ffff);}
+100%{filter:drop-shadow(0 0 10px #00c8ff);}
 
 }
 
@@ -72,7 +72,6 @@ width:30px;
 height:3px;
 background:#00c8ff;
 margin:6px 0;
-transition:0.3s;
 }
 
 .menu{
@@ -84,14 +83,13 @@ height:100%;
 background:#020617;
 padding-top:100px;
 transition:0.4s;
-z-index:4;
 }
 
 .menu a{
 display:block;
 padding:20px;
-text-decoration:none;
 color:white;
+text-decoration:none;
 border-bottom:1px solid rgba(255,255,255,0.1);
 cursor:pointer;
 }
@@ -105,18 +103,58 @@ color:black;
 right:0;
 }
 
-/* POPUPS */
+/* MODO SISTEMA */
+
+.redMode{
+background:#0b0000;
+}
+
+.redMode .menuBtn div{
+background:#ff4040;
+}
+
+.redMode .mainLogo{
+filter:drop-shadow(0 0 25px #ff3030);
+}
+
+/* PANEL SISTEMA */
+
+.systemPanel{
+
+position:fixed;
+left:0;
+top:0;
+height:100%;
+width:260px;
+
+background:#020617;
+
+padding:20px;
+
+display:none;
+
+}
+
+.systemPanel.show{
+display:block;
+}
+
+.systemPanel button{
+width:100%;
+margin-top:10px;
+padding:10px;
+cursor:pointer;
+}
+
+/* POPUP */
 
 .popup{
 position:fixed;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
-width:400px;
-max-width:85%;
 background:#020617;
 border:1px solid #00c8ff;
-border-radius:10px;
 padding:20px;
 display:none;
 z-index:10;
@@ -125,40 +163,6 @@ z-index:10;
 .popup.show{
 display:block;
 }
-
-/* CEO PANEL */
-
-.dashboard{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-margin-top:15px;
-}
-
-.card{
-
-background:#020617;
-border:1px solid #00c8ff;
-padding:10px;
-border-radius:6px;
-
-}
-
-/* SYSTEM MODE */
-
-.systemMode{
-background:#050016;
-}
-
-.systemMode .menuBtn div{
-background:#a855f7;
-}
-
-.systemMode .mainLogo{
-filter:drop-shadow(0 0 25px #a855f7);
-}
-
-/* CANVAS */
 
 canvas{
 position:fixed;
@@ -193,31 +197,35 @@ opacity:0.6;
 <a onclick="future()">Tecnología</a>
 <a onclick="future()">Proyectos</a>
 <a onclick="future()">Contacto</a>
-<a onclick="toggleSystem()">Modo Sistema</a>
+<a onclick="toggleMode()">Modo Sistema</a>
 
 </div>
 
-<!-- LOGIN -->
+<div class="systemPanel" id="systemPanel">
+
+<h3>Funciones del sistema</h3>
+
+<p>Laboratorio IA — Próximamente</p>
+<p>Control de servidores — Próximamente</p>
+<p>Repositorio tecnológico — Próximamente</p>
+<p>Gestión de proyectos — Próximamente</p>
+<p>Seguridad del sistema — Próximamente</p>
+<p>Centro de innovación — Próximamente</p>
+<p>Red global — Próximamente</p>
+
+<button onclick="logout()">Cambiar de cuenta</button>
+
+</div>
 
 <div class="popup" id="login">
 
-<h3>Ingresar código</h3>
+<h3>Ingresa código</h3>
 
-<input id="code" placeholder="Código" style="width:100%;padding:8px">
+<input id="code">
 
-<button onclick="checkCode()" style="margin-top:10px">Entrar</button>
+<button onclick="checkCode()">Entrar</button>
 
 <p id="msg"></p>
-
-</div>
-
-<!-- INTERFAZ -->
-
-<div class="popup" id="panel">
-
-<h2 id="panelTitle"></h2>
-
-<div id="panelContent"></div>
 
 </div>
 
@@ -230,7 +238,9 @@ opacity:0.6;
 
 <img src="logo.png" class="mainLogo">
 
-<div class="coming">Próximamente</div>
+<div class="coming">
+Próximamente
+</div>
 
 </div>
 
@@ -240,41 +250,39 @@ opacity:0.6;
 
 <script>
 
+let system=false;
+
 /* MENU */
 
 function toggleMenu(){
 document.getElementById("menu").classList.toggle("active");
 }
 
-/* SISTEMA */
+/* MODO SISTEMA */
 
-let system=false;
-
-function toggleSystem(){
+function toggleMode(){
 
 system=!system;
 
 if(system){
 
-document.body.classList.add("systemMode");
-alert("Modo Sistema activado");
+document.body.classList.add("redMode");
 
 }else{
 
-document.body.classList.remove("systemMode");
-alert("Modo Sistema desactivado");
+document.body.classList.remove("redMode");
 
 }
 
 }
 
-/* SESION */
+/* LOGIN */
 
 function openSession(){
 
 if(!system){
 
-alert("Debes activar Modo Sistema");
+alert("Activa primero el modo sistema");
 
 return;
 
@@ -292,13 +300,13 @@ let code=document.getElementById("code").value;
 
 if(code==="67067"){
 
-employeePanel("Belman");
+startSession("Belman");
 
 }
 
 else if(code==="52370"){
 
-let name=prompt("Nombre clave (10 letras)");
+let name=prompt("Nombre clave (máx 10)");
 
 if(!name || name.length>10){
 
@@ -307,29 +315,27 @@ return;
 
 }
 
-employeePanel(name);
+startSession(name);
 
 }
 
 else if(code==="07811"){
 
-let role=prompt("CEO o empleado");
+let pass=prompt("Contraseña");
 
-if(role==="empleado"){
+if(pass==="aldo78"){
 
-employeePanel("Aldo");
+startSession("Aldo");
 
 }
 
-if(role==="CEO"||role==="ceo"){
+else if(pass==="lordall78"){
 
-let pass=prompt("Contraseña CEO");
+startSession("Aldo — CEO");
 
-if(pass==="lordall78"){
+}
 
-ceoPanel();
-
-}else{
+else{
 
 alert("Contraseña incorrecta");
 
@@ -339,84 +345,60 @@ alert("Contraseña incorrecta");
 
 }
 
-else{
+/* INICIAR SESION */
 
-document.getElementById("msg").innerText="Código incorrecto";
+function startSession(user){
 
-}
+alert("Bienvenido al sistema interno de Sir Of All Tec.\nSesión iniciada correctamente.");
 
-}
+document.getElementById("login").classList.remove("show");
 
-/* EMPLOYEE PANEL */
-
-function employeePanel(name){
-
-document.getElementById("panelTitle").innerText="Bienvenido "+name;
-
-document.getElementById("panelContent").innerHTML=`
-
-<div class="dashboard">
-
-<div class="card">Estado servidores<br>Próximamente</div>
-<div class="card">Laboratorio IA<br>Próximamente</div>
-<div class="card">Proyectos internos<br>Próximamente</div>
-<div class="card">Repositorio tecnológico<br>Próximamente</div>
-
-</div>
-
-`;
-
-document.getElementById("panel").classList.add("show");
+document.getElementById("systemPanel").classList.add("show");
 
 }
 
-/* CEO PANEL */
+/* LOGOUT */
 
-function ceoPanel(){
+function logout(){
 
-document.getElementById("panelTitle").innerText="CEO Dashboard — Aldo";
+document.getElementById("systemPanel").classList.remove("show");
 
-document.getElementById("panelContent").innerHTML=`
-
-<div class="dashboard">
-
-<div class="card">Control global empresa<br>En desarrollo</div>
-<div class="card">Gestión empleados<br>En desarrollo</div>
-<div class="card">Centro innovación IA<br>En desarrollo</div>
-<div class="card">Seguridad del sistema<br>En desarrollo</div>
-<div class="card">Control proyectos<br>En desarrollo</div>
-<div class="card">Acceso root sistema<br>En desarrollo</div>
-
-</div>
-
-`;
-
-document.getElementById("panel").classList.add("show");
+document.getElementById("login").classList.add("show");
 
 }
 
-/* RED TECNOLOGICA */
+/* RED ORIGINAL */
 
 const canvas=document.getElementById("bg");
 const ctx=canvas.getContext("2d");
-
-let nodes=[];
 
 function resize(){
 
 canvas.width=window.innerWidth;
 canvas.height=window.innerHeight;
 
+createNodes();
+
+}
+
+window.addEventListener("resize",resize);
+
+let nodes=[];
+
+function createNodes(){
+
 nodes=[];
 
-for(let i=0;i<120;i++){
+let density=(canvas.width*canvas.height)/4500;
+
+for(let i=0;i<density;i++){
 
 nodes.push({
 
 x:Math.random()*canvas.width,
 y:Math.random()*canvas.height,
-vx:(Math.random()-0.5)*0.6,
-vy:(Math.random()-0.5)*0.6
+vx:(Math.random()-0.5)*0.5,
+vy:(Math.random()-0.5)*0.5
 
 });
 
@@ -425,8 +407,6 @@ vy:(Math.random()-0.5)*0.6
 }
 
 resize();
-
-window.addEventListener("resize",resize);
 
 function animate(){
 
@@ -437,11 +417,12 @@ nodes.forEach(n=>{
 n.x+=n.vx;
 n.y+=n.vy;
 
+if(n.x<0||n.x>canvas.width) n.vx*=-1;
+if(n.y<0||n.y>canvas.height) n.vy*=-1;
+
 ctx.beginPath();
 ctx.arc(n.x,n.y,2,0,Math.PI*2);
-
-ctx.fillStyle=system ? "#a855f7" : "#00c8ff";
-
+ctx.fillStyle=system ? "#ff4040" : "#00c8ff";
 ctx.fill();
 
 nodes.forEach(n2=>{
@@ -451,15 +432,19 @@ let dy=n.y-n2.y;
 
 let dist=Math.sqrt(dx*dx+dy*dy);
 
-if(dist<170){
+if(dist<180){
+
+let depth=1-(dist/180);
 
 ctx.beginPath();
 ctx.moveTo(n.x,n.y);
 ctx.lineTo(n2.x,n2.y);
 
 ctx.strokeStyle=system
-? "rgba(168,85,247,0.4)"
-: "rgba(0,200,255,0.4)";
+? "rgba(255,60,60,"+depth+")"
+: "rgba(0,200,255,"+depth+")";
+
+ctx.lineWidth=depth*2;
 
 ctx.stroke();
 
@@ -474,14 +459,6 @@ requestAnimationFrame(animate);
 }
 
 animate();
-
-/* FUTURE */
-
-function future(){
-
-alert("Sección en desarrollo");
-
-}
 
 </script>
 
