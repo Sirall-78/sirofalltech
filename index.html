@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
 
 <meta charset="UTF-8">
@@ -72,7 +71,9 @@ transition:0.3s;
 transform:rotate(45deg) translate(5px,5px);
 }
 
-.menuBtn.active div:nth-child(2){opacity:0;}
+.menuBtn.active div:nth-child(2){
+opacity:0;
+}
 
 .menuBtn.active div:nth-child(3){
 transform:rotate(-45deg) translate(6px,-6px);
@@ -104,7 +105,9 @@ background:#00c8ff;
 color:black;
 }
 
-.menu.active{right:0;}
+.menu.active{
+right:0;
+}
 
 /* POPUP */
 
@@ -123,7 +126,9 @@ display:none;
 z-index:6;
 }
 
-.popup.show{display:block;}
+.popup.show{
+display:block;
+}
 
 .popupHeader{
 display:flex;
@@ -144,10 +149,22 @@ font-size:18px;
 background:#0b0000;
 }
 
-.redMode .menuBtn div{background:#ff4040;}
-.redMode .menu a:hover{background:#ff3030;color:white;}
-.redMode .popup{border:1px solid #ff3030;}
-.redMode .mainLogo{filter:drop-shadow(0 0 25px #ff3030);}
+.redMode .menuBtn div{
+background:#ff4040;
+}
+
+.redMode .menu a:hover{
+background:#ff3030;
+color:white;
+}
+
+.redMode .popup{
+border:1px solid #ff3030;
+}
+
+.redMode .mainLogo{
+filter:drop-shadow(0 0 25px #ff3030);
+}
 
 /* CANVAS */
 
@@ -169,13 +186,12 @@ opacity:0.6;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<!-- MENU -->
-
-<div class="menuBtn" onclick="toggleMenu()" id="menuBtn">
+<div class="menuBtn" id="menuBtn">
 <div></div>
 <div></div>
 <div></div>
@@ -192,7 +208,7 @@ opacity:0.6;
 
 </div>
 
-<!-- POPUP MENSAJES -->
+<!-- Popup mensajes -->
 
 <div class="popup" id="popup">
 
@@ -205,7 +221,7 @@ opacity:0.6;
 
 </div>
 
-<!-- POPUP CODIGO -->
+<!-- Popup código -->
 
 <div class="popup" id="codePopup">
 
@@ -224,7 +240,7 @@ Ingresar
 
 </div>
 
-<!-- POPUP INTERFAZ -->
+<!-- Popup interfaz -->
 
 <div class="popup" id="userInterface">
 
@@ -239,8 +255,6 @@ Ingresar
 
 <canvas id="bg"></canvas>
 
-<!-- HERO -->
-
 <div class="hero">
 
 <h1>Hola, bienvenido a</h1>
@@ -248,7 +262,9 @@ Ingresar
 
 <img src="logo.png" class="mainLogo">
 
-<div class="coming">Próximamente</div>
+<div class="coming">
+Próximamente
+</div>
 
 </div>
 
@@ -258,7 +274,23 @@ Ingresar
 
 <script>
 
-/* VARIABLES */
+/* VARIABLES DOM */
+
+const menu = document.getElementById("menu")
+const menuBtn = document.getElementById("menuBtn")
+
+const popup = document.getElementById("popup")
+const typing = document.getElementById("typing")
+
+const codePopup = document.getElementById("codePopup")
+const accessCode = document.getElementById("accessCode")
+const codeMessage = document.getElementById("codeMessage")
+
+const userInterface = document.getElementById("userInterface")
+const uiTitle = document.getElementById("uiTitle")
+const uiContent = document.getElementById("uiContent")
+
+/* VARIABLES SISTEMA */
 
 let mode="blue"
 let systemMode=false
@@ -267,49 +299,36 @@ const bannedWords=["fuck","shit","bitch","pendejo","idiota","mierda"]
 
 /* MENU */
 
-function toggleMenu(){
+menuBtn.onclick=()=>{
 
 menu.classList.toggle("active")
 menuBtn.classList.toggle("active")
 
 }
 
-/* MENSAJES SISTEMA */
+/* MENSAJE SISTEMA */
 
 function systemMessage(msg){
 
-let popup=document.getElementById("popup")
-let text=document.getElementById("typing")
-
 popup.classList.add("show")
 
-text.innerHTML=""
+typing.innerHTML=""
 
 let i=0
 
-let typing=setInterval(()=>{
+let typingEffect=setInterval(()=>{
 
-text.innerHTML+=msg[i]
+typing.innerHTML+=msg[i]
 i++
 
-if(i>=msg.length)clearInterval(typing)
+if(i>=msg.length)clearInterval(typingEffect)
 
 },35)
 
 }
 
-/* POPUPS */
-
 function closePopup(){
 popup.classList.remove("show")
-}
-
-function closeCodePopup(){
-codePopup.classList.remove("show")
-}
-
-function closeUserInterface(){
-userInterface.classList.remove("show")
 }
 
 /* SECCIONES FUTURAS */
@@ -344,7 +363,7 @@ systemMessage("Modo Sistema DESACTIVADO")
 
 }
 
-/* ABRIR SESION */
+/* SESION */
 
 function openSessionPopup(){
 
@@ -361,6 +380,14 @@ codeMessage.innerHTML=""
 
 }
 
+function closeCodePopup(){
+codePopup.classList.remove("show")
+}
+
+function closeUserInterface(){
+userInterface.classList.remove("show")
+}
+
 /* VALIDAR CODIGOS */
 
 function submitCode(){
@@ -369,11 +396,7 @@ let code=accessCode.value.trim()
 
 if(code==="67067"){
 
-openUserInterface(
-"Belman",
-"Bienvenido Belman",
-"Acceso concedido al sistema Sir Of All Tec."
-)
+openUserInterface("Belman","Bienvenido Belman","Acceso concedido al sistema.")
 
 closeCodePopup()
 
@@ -407,11 +430,7 @@ return
 
 }
 
-openUserInterface(
-userName,
-`Bienvenid@ ${userName}`,
-"Acceso limitado activado."
-)
+openUserInterface(userName,`Bienvenid@ ${userName}`,"Acceso limitado activado.")
 
 closeCodePopup()
 
@@ -427,11 +446,7 @@ choice=choice.toLowerCase()
 
 if(choice==="empleado"){
 
-openUserInterface(
-"Aldo",
-"Aldo - Empleado",
-"Acceso de desarrollador básico."
-)
+openUserInterface("Aldo","Empleado","Acceso de desarrollador.")
 
 closeCodePopup()
 
@@ -443,17 +458,11 @@ let pass=prompt("Contraseña CEO")
 
 if(pass==="lordall78"){
 
-openUserInterface(
-"Aldo (CEO)",
-"Panel CEO",
-"Acceso completo del sistema habilitado."
-)
+openUserInterface("Aldo (CEO)","Panel CEO","Acceso completo habilitado.")
 
 closeCodePopup()
 
-}
-
-else{
+}else{
 
 codeMessage.innerHTML="Contraseña incorrecta"
 
@@ -554,33 +563,6 @@ ctx.arc(n.x,n.y,2,0,Math.PI*2)
 ctx.fillStyle=mode==="red"?"#ff4040":"#00c8ff"
 
 ctx.fill()
-
-nodes.forEach(n2=>{
-
-let dx=n.x-n2.x
-let dy=n.y-n2.y
-
-let dist=Math.sqrt(dx*dx+dy*dy)
-
-if(dist<180){
-
-let depth=1-(dist/180)
-
-ctx.beginPath()
-ctx.moveTo(n.x,n.y)
-ctx.lineTo(n2.x,n2.y)
-
-ctx.strokeStyle=mode==="red"
-?`rgba(255,60,60,${depth})`
-:`rgba(0,200,255,${depth})`
-
-ctx.lineWidth=depth*2
-
-ctx.stroke()
-
-}
-
-})
 
 })
 
