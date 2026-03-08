@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Sir Of All Tec</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+font-family:'Orbitron',sans-serif;
+background:#030712;
+color:white;
+overflow:hidden;
+transition:0.4s;
+}
+
+/* HERO */
+
+.hero{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+}
+
+.hero h1{
+font-size:38px;
+}
+
+.hero h2{
+font-size:30px;
+margin-top:10px;
+}
+
+.mainLogo{
+width:180px;
+margin-top:20px;
+filter:drop-shadow(0 0 15px #00c8ff);
+animation:glow 3s infinite alternate;
+}
+
+@keyframes glow{
+
+0%{filter:drop-shadow(0 0 10px #00c8ff);transform:scale(1);}
+50%{filter:drop-shadow(0 0 40px #00ffff);transform:scale(1.05);}
+100%{filter:drop-shadow(0 0 10px #00c8ff);transform:scale(1);}
+
+}
+
+.coming{
+margin-top:15px;
+font-size:20px;
+}
+
+/* MENU */
+
+.menuBtn{
+position:fixed;
+right:25px;
+top:25px;
+cursor:pointer;
+z-index:5;
+}
+
+.menuBtn div{
+width:30px;
+height:3px;
+background:#00c8ff;
+margin:6px 0;
+transition:0.3s;
+}
+
+.menu{
+position:fixed;
+right:-260px;
+top:0;
+width:260px;
+height:100%;
+background:#020617;
+padding-top:100px;
+transition:0.4s;
+z-index:4;
+}
+
+.menu a{
+display:block;
+padding:20px;
+text-decoration:none;
+color:white;
+border-bottom:1px solid rgba(255,255,255,0.1);
+cursor:pointer;
+}
+
+.menu a:hover{
+background:#00c8ff;
+color:black;
+}
+
+.menu.active{
+right:0;
+}
+
+/* POPUPS */
+
+.popup{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:400px;
+max-width:85%;
+background:#020617;
+border:1px solid #00c8ff;
+border-radius:10px;
+padding:20px;
+display:none;
+z-index:10;
+}
+
+.popup.show{
+display:block;
+}
+
+/* CEO PANEL */
+
+.dashboard{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-top:15px;
+}
+
+.card{
+
+background:#020617;
+border:1px solid #00c8ff;
+padding:10px;
+border-radius:6px;
+
+}
+
+/* SYSTEM MODE */
+
+.systemMode{
+background:#050016;
+}
+
+.systemMode .menuBtn div{
+background:#a855f7;
+}
+
+.systemMode .mainLogo{
+filter:drop-shadow(0 0 25px #a855f7);
+}
+
+/* CANVAS */
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+}
+
+footer{
+position:fixed;
+bottom:40px;
+width:100%;
+text-align:center;
+opacity:0.6;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="menuBtn" onclick="toggleMenu()">
+<div></div>
+<div></div>
+<div></div>
+</div>
+
+<div class="menu" id="menu">
+
+<a onclick="future()">Inicio</a>
+<a onclick="openSession()">Sesión</a>
+<a onclick="future()">Tecnología</a>
+<a onclick="future()">Proyectos</a>
+<a onclick="future()">Contacto</a>
+<a onclick="toggleSystem()">Modo Sistema</a>
+
+</div>
+
+<!-- LOGIN -->
+
+<div class="popup" id="login">
+
+<h3>Ingresar código</h3>
+
+<input id="code" placeholder="Código" style="width:100%;padding:8px">
+
+<button onclick="checkCode()" style="margin-top:10px">Entrar</button>
+
+<p id="msg"></p>
+
+</div>
+
+<!-- INTERFAZ -->
+
+<div class="popup" id="panel">
+
+<h2 id="panelTitle"></h2>
+
+<div id="panelContent"></div>
+
+</div>
+
+<canvas id="bg"></canvas>
+
+<div class="hero">
+
+<h1>Hola, bienvenido a</h1>
+<h2>Sir Of All Tec</h2>
+
+<img src="logo.png" class="mainLogo">
+
+<div class="coming">Próximamente</div>
+
+</div>
+
+<footer>
+© SIROFALLTECH
+</footer>
+
+<script>
+
+/* MENU */
+
+function toggleMenu(){
+document.getElementById("menu").classList.toggle("active");
+}
+
+/* SISTEMA */
+
+let system=false;
+
+function toggleSystem(){
+
+system=!system;
+
+if(system){
+
+document.body.classList.add("systemMode");
+alert("Modo Sistema activado");
+
+}else{
+
+document.body.classList.remove("systemMode");
+alert("Modo Sistema desactivado");
+
+}
+
+}
+
+/* SESION */
+
+function openSession(){
+
+if(!system){
+
+alert("Debes activar Modo Sistema");
+
+return;
+
+}
+
+document.getElementById("login").classList.add("show");
+
+}
+
+/* CODIGOS */
+
+function checkCode(){
+
+let code=document.getElementById("code").value;
+
+if(code==="67067"){
+
+employeePanel("Belman");
+
+}
+
+else if(code==="52370"){
+
+let name=prompt("Nombre clave (10 letras)");
+
+if(!name || name.length>10){
+
+alert("Nombre inválido");
+return;
+
+}
+
+employeePanel(name);
+
+}
+
+else if(code==="07811"){
+
+let role=prompt("CEO o empleado");
+
+if(role==="empleado"){
+
+employeePanel("Aldo");
+
+}
+
+if(role==="CEO"||role==="ceo"){
+
+let pass=prompt("Contraseña CEO");
+
+if(pass==="lordall78"){
+
+ceoPanel();
+
+}else{
+
+alert("Contraseña incorrecta");
+
+}
+
+}
+
+}
+
+else{
+
+document.getElementById("msg").innerText="Código incorrecto";
+
+}
+
+}
+
+/* EMPLOYEE PANEL */
+
+function employeePanel(name){
+
+document.getElementById("panelTitle").innerText="Bienvenido "+name;
+
+document.getElementById("panelContent").innerHTML=`
+
+<div class="dashboard">
+
+<div class="card">Estado servidores<br>Próximamente</div>
+<div class="card">Laboratorio IA<br>Próximamente</div>
+<div class="card">Proyectos internos<br>Próximamente</div>
+<div class="card">Repositorio tecnológico<br>Próximamente</div>
+
+</div>
+
+`;
+
+document.getElementById("panel").classList.add("show");
+
+}
+
+/* CEO PANEL */
+
+function ceoPanel(){
+
+document.getElementById("panelTitle").innerText="CEO Dashboard — Aldo";
+
+document.getElementById("panelContent").innerHTML=`
+
+<div class="dashboard">
+
+<div class="card">Control global empresa<br>En desarrollo</div>
+<div class="card">Gestión empleados<br>En desarrollo</div>
+<div class="card">Centro innovación IA<br>En desarrollo</div>
+<div class="card">Seguridad del sistema<br>En desarrollo</div>
+<div class="card">Control proyectos<br>En desarrollo</div>
+<div class="card">Acceso root sistema<br>En desarrollo</div>
+
+</div>
+
+`;
+
+document.getElementById("panel").classList.add("show");
+
+}
+
+/* RED TECNOLOGICA */
+
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
+
+let nodes=[];
+
+function resize(){
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+nodes=[];
+
+for(let i=0;i<120;i++){
+
+nodes.push({
+
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+vx:(Math.random()-0.5)*0.6,
+vy:(Math.random()-0.5)*0.6
+
+});
+
+}
+
+}
+
+resize();
+
+window.addEventListener("resize",resize);
+
+function animate(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+nodes.forEach(n=>{
+
+n.x+=n.vx;
+n.y+=n.vy;
+
+ctx.beginPath();
+ctx.arc(n.x,n.y,2,0,Math.PI*2);
+
+ctx.fillStyle=system ? "#a855f7" : "#00c8ff";
+
+ctx.fill();
+
+nodes.forEach(n2=>{
+
+let dx=n.x-n2.x;
+let dy=n.y-n2.y;
+
+let dist=Math.sqrt(dx*dx+dy*dy);
+
+if(dist<170){
+
+ctx.beginPath();
+ctx.moveTo(n.x,n.y);
+ctx.lineTo(n2.x,n2.y);
+
+ctx.strokeStyle=system
+? "rgba(168,85,247,0.4)"
+: "rgba(0,200,255,0.4)";
+
+ctx.stroke();
+
+}
+
+});
+
+});
+
+requestAnimationFrame(animate);
+
+}
+
+animate();
+
+/* FUTURE */
+
+function future(){
+
+alert("Sección en desarrollo");
+
+}
+
+</script>
+
+</body>
+</html>
