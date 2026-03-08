@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
 <meta charset="UTF-8">
 <title>Sir Of All Tec</title>
 
@@ -29,8 +28,14 @@ align-items:center;
 text-align:center;
 }
 
-.hero h1{font-size:38px;}
-.hero h2{font-size:30px;margin-top:10px;}
+.hero h1{
+font-size:38px;
+}
+
+.hero h2{
+font-size:30px;
+margin-top:10px;
+}
 
 .mainLogo{
 width:180px;
@@ -41,15 +46,29 @@ animation:glow 3s infinite alternate;
 
 @keyframes glow{
 
-0%{filter:drop-shadow(0 0 10px #00c8ff);transform:scale(1);}
-50%{filter:drop-shadow(0 0 40px #00ffff);transform:scale(1.05);}
-100%{filter:drop-shadow(0 0 10px #00c8ff);transform:scale(1);}
+0%{
+filter:drop-shadow(0 0 10px #00c8ff);
+transform:scale(1);
+}
+
+50%{
+filter:drop-shadow(0 0 40px #00ffff);
+transform:scale(1.05);
+}
+
+100%{
+filter:drop-shadow(0 0 10px #00c8ff);
+transform:scale(1);
+}
 
 }
 
-.coming{margin-top:15px;font-size:20px;}
+.coming{
+margin-top:15px;
+font-size:20px;
+}
 
-/* MENU */
+/* MENU BOTON */
 
 .menuBtn{
 position:fixed;
@@ -78,6 +97,8 @@ opacity:0;
 .menuBtn.active div:nth-child(3){
 transform:rotate(-45deg) translate(6px,-6px);
 }
+
+/* MENU */
 
 .menu{
 position:fixed;
@@ -112,18 +133,27 @@ right:0;
 /* POPUP */
 
 .popup{
+
 position:fixed;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
+
 width:320px;
-max-width:85%;
+max-width:80%;
+
 background:#020617;
 border:1px solid #00c8ff;
 border-radius:10px;
+
 padding:20px;
+
 display:none;
+
 z-index:6;
+
+cursor:move;
+
 }
 
 .popup.show{
@@ -191,7 +221,7 @@ opacity:0.6;
 
 <body>
 
-<div class="menuBtn" id="menuBtn">
+<div class="menuBtn" onclick="toggleMenu()" id="menuBtn">
 <div></div>
 <div></div>
 <div></div>
@@ -208,48 +238,44 @@ opacity:0.6;
 
 </div>
 
-<!-- Popup mensajes -->
-
 <div class="popup" id="popup">
 
 <div class="popupHeader">
+
 <b>Estado del sistema</b>
+
 <div class="closeBtn" onclick="closePopup()">✕</div>
+
 </div>
 
 <div id="typing"></div>
 
 </div>
 
-<!-- Popup código -->
+<!-- POPUP CODIGO -->
 
 <div class="popup" id="codePopup">
-
 <div class="popupHeader">
-<b>Ingresar código</b>
+<b>Ingresar código de acceso</b>
 <div class="closeBtn" onclick="closeCodePopup()">✕</div>
 </div>
 
-<input type="text" id="accessCode" placeholder="Código..." style="width:100%;padding:10px">
+<input type="text" id="accessCode" placeholder="Escribe tu código..." maxlength="10" style="width:100%;padding:10px;margin-top:10px;font-size:16px;">
+<button onclick="submitCode()" style="margin-top:10px;padding:10px 20px;cursor:pointer;background:#00c8ff;color:black;border:none;font-weight:bold;">Ingresar</button>
 
-<button onclick="submitCode()" style="margin-top:10px;padding:10px;width:100%;cursor:pointer;background:#00c8ff;border:none;font-weight:bold;">
-Ingresar
-</button>
-
-<div id="codeMessage" style="margin-top:10px;"></div>
-
+<div id="codeMessage" style="margin-top:15px;"></div>
 </div>
 
-<!-- Popup interfaz -->
+<!-- INTERFAZ USUARIO -->
 
-<div class="popup" id="userInterface">
+<div class="popup" id="userInterface" style="width:500px;max-width:90%;">
 
 <div class="popupHeader">
-<b id="uiTitle"></b>
+<b id="uiTitle">Bienvenido</b>
 <div class="closeBtn" onclick="closeUserInterface()">✕</div>
 </div>
 
-<div id="uiContent"></div>
+<div id="uiContent" style="margin-top:10px;font-size:16px;"></div>
 
 </div>
 
@@ -274,70 +300,48 @@ Próximamente
 
 <script>
 
-/* VARIABLES DOM */
-
-const menu = document.getElementById("menu")
-const menuBtn = document.getElementById("menuBtn")
-
-const popup = document.getElementById("popup")
-const typing = document.getElementById("typing")
-
-const codePopup = document.getElementById("codePopup")
-const accessCode = document.getElementById("accessCode")
-const codeMessage = document.getElementById("codeMessage")
-
-const userInterface = document.getElementById("userInterface")
-const uiTitle = document.getElementById("uiTitle")
-const uiContent = document.getElementById("uiContent")
-
-/* VARIABLES SISTEMA */
+/* VARIABLES */
 
 let mode="blue"
 let systemMode=false
 
-const bannedWords=["fuck","shit","bitch","pendejo","idiota","mierda"]
-
 /* MENU */
 
-menuBtn.onclick=()=>{
-
-menu.classList.toggle("active")
-menuBtn.classList.toggle("active")
-
+function toggleMenu(){
+document.getElementById("menu").classList.toggle("active")
+document.getElementById("menuBtn").classList.toggle("active")
 }
 
-/* MENSAJE SISTEMA */
+/* POPUP */
 
-function systemMessage(msg){
+function future(){
+
+let popup=document.getElementById("popup")
+let text=document.getElementById("typing")
 
 popup.classList.add("show")
 
-typing.innerHTML=""
+let message="Esta sección se encuentra en desarrollo... Próximamente disponible."
 
+text.innerHTML=""
 let i=0
 
-let typingEffect=setInterval(()=>{
+let typing=setInterval(()=>{
 
-typing.innerHTML+=msg[i]
+text.innerHTML+=message[i]
 i++
 
-if(i>=msg.length)clearInterval(typingEffect)
+if(i>=message.length) clearInterval(typing)
 
 },35)
 
 }
 
 function closePopup(){
-popup.classList.remove("show")
+document.getElementById("popup").classList.remove("show")
 }
 
-/* SECCIONES FUTURAS */
-
-function future(){
-systemMessage("Esta sección estará disponible próximamente.")
-}
-
-/* MODO SISTEMA */
+/* MODO */
 
 function toggleMode(){
 
@@ -345,126 +349,110 @@ if(mode==="blue"){
 
 mode="red"
 systemMode=true
-
 document.body.classList.add("redMode")
-
-systemMessage("Modo Sistema ACTIVADO")
 
 }else{
 
 mode="blue"
 systemMode=false
-
 document.body.classList.remove("redMode")
 
-systemMessage("Modo Sistema DESACTIVADO")
-
 }
 
 }
 
-/* SESION */
+/* ABRIR SESION */
 
 function openSessionPopup(){
 
 if(!systemMode){
 
-systemMessage("Acceso bloqueado. Activa el Modo Sistema.")
+future()
 return
 
 }
 
-codePopup.classList.add("show")
-accessCode.value=""
-codeMessage.innerHTML=""
-
+document.getElementById("codePopup").classList.add("show")
 }
 
 function closeCodePopup(){
-codePopup.classList.remove("show")
+document.getElementById("codePopup").classList.remove("show")
 }
 
 function closeUserInterface(){
-userInterface.classList.remove("show")
+document.getElementById("userInterface").classList.remove("show")
 }
 
-/* VALIDAR CODIGOS */
+/* CODIGOS */
+
+const bannedWords=["fuck","shit","bitch","ass","pendejo","idiota","mierda","culo","cabron","gay","vrg"]
 
 function submitCode(){
 
-let code=accessCode.value.trim()
+let code=document.getElementById("accessCode").value.trim()
+let msg=document.getElementById("codeMessage")
 
 if(code==="67067"){
 
-openUserInterface("Belman","Bienvenido Belman","Acceso concedido al sistema.")
-
+openUserInterface("Belman","Belman Bienvenido a Sir Of All Tec.","Próximamente podras acceder a mas funciones no oldides tu codigo. En caso de querer un cambio de codigo manda un correo al sirofalltec@gamail.com")
 closeCodePopup()
 
 }
 
 else if(code==="52370"){
 
-let userName=prompt("Ingresa nombre clave (max 10 letras)")
+let userName=prompt("Ingresa tu nombre clave (máx 10 letras)")
 
-if(!userName)return
+if(!userName) return
 
 userName=userName.trim()
 
 if(userName.length>10){
-
-codeMessage.innerHTML="Nombre demasiado largo"
+msg.innerHTML="Nombre demasiado largo."
 return
-
 }
 
-let lower=userName.toLowerCase()
+let lowerName=userName.toLowerCase()
 
 for(let word of bannedWords){
-
-if(lower.includes(word)){
-
-codeMessage.innerHTML="Nombre no permitido"
+if(lowerName.includes(word)){
+msg.innerHTML="Nombre no permitido."
 return
-
+}
 }
 
-}
-
-openUserInterface(userName,`Bienvenid@ ${userName}`,"Acceso limitado activado.")
-
+openUserInterface(userName,`Bienvenid@ ${userName} a Sir Of All Tec.`,"Próximamente podrás acceder a nuevas funciones mas de forma limitada.")
 closeCodePopup()
 
 }
 
 else if(code==="07811"){
 
-let choice=prompt("Modo: CEO o Empleado")
+let choice=prompt("Elige modo: 'CEO' o 'Empleado'")
 
-if(!choice)return
+if(!choice) return
 
-choice=choice.toLowerCase()
+choice=choice.trim().toLowerCase()
 
 if(choice==="empleado"){
 
-openUserInterface("Aldo","Empleado","Acceso de desarrollador.")
-
+openUserInterface("Aldo"," Aldo Bienvenido a Sir Of All Tec.","Próximamente podrás acceder a funciones de desarrollador.")
 closeCodePopup()
 
 }
 
 else if(choice==="ceo"){
 
-let pass=prompt("Contraseña CEO")
+let ceoPass=prompt("Ingresa contraseña de CEO:")
 
-if(pass==="lordall78"){
+if(ceoPass==="lordall78"){
 
-openUserInterface("Aldo (CEO)","Panel CEO","Acceso completo habilitado.")
-
+openUserInterface("Aldo (CEO)","Aldo Bienvenido, CEO de Sir Of All Tec.","Interfaz de administrador: aquí podrás gestionar usuarios, proyectos y más. Tendras acceso a mas cosas en un futuro")
 closeCodePopup()
 
 }else{
 
-codeMessage.innerHTML="Contraseña incorrecta"
+msg.innerHTML="Contraseña incorrecta."
 
 }
 
@@ -474,103 +462,34 @@ codeMessage.innerHTML="Contraseña incorrecta"
 
 else{
 
-codeMessage.innerHTML="Código incorrecto"
+msg.innerHTML="Código incorrecto."
 
 }
 
 }
-
-/* INTERFAZ */
 
 function openUserInterface(name,title,message){
 
-uiTitle.innerText=title
+let ui=document.getElementById("userInterface")
 
-uiContent.innerHTML=""
+document.getElementById("uiTitle").innerText=title
+document.getElementById("uiContent").innerHTML=""
 
-userInterface.classList.add("show")
+ui.classList.add("show")
 
 let i=0
 
-let typing=setInterval(()=>{
+let interval=setInterval(()=>{
 
-uiContent.innerHTML+=message.charAt(i)
+document.getElementById("uiContent").innerHTML+=message.charAt(i)
 
 i++
 
-if(i>=message.length)clearInterval(typing)
+if(i>=message.length) clearInterval(interval)
 
-},30)
-
-}
-
-/* FONDO TECNOLOGICO */
-
-const canvas=document.getElementById("bg")
-const ctx=canvas.getContext("2d")
-
-function resize(){
-
-canvas.width=window.innerWidth
-canvas.height=window.innerHeight
-
-createNodes()
+},35)
 
 }
-
-window.addEventListener("resize",resize)
-
-let nodes=[]
-
-function createNodes(){
-
-nodes=[]
-
-let density=(canvas.width*canvas.height)/4500
-
-for(let i=0;i<density;i++){
-
-nodes.push({
-
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-vx:(Math.random()-0.5)*0.5,
-vy:(Math.random()-0.5)*0.5
-
-})
-
-}
-
-}
-
-resize()
-
-function animate(){
-
-ctx.clearRect(0,0,canvas.width,canvas.height)
-
-nodes.forEach(n=>{
-
-n.x+=n.vx
-n.y+=n.vy
-
-if(n.x<0||n.x>canvas.width)n.vx*=-1
-if(n.y<0||n.y>canvas.height)n.vy*=-1
-
-ctx.beginPath()
-ctx.arc(n.x,n.y,2,0,Math.PI*2)
-
-ctx.fillStyle=mode==="red"?"#ff4040":"#00c8ff"
-
-ctx.fill()
-
-})
-
-requestAnimationFrame(animate)
-
-}
-
-animate()
 
 </script>
 
