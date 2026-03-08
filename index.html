@@ -28,8 +28,14 @@ align-items:center;
 text-align:center;
 }
 
-.hero h1{font-size:38px;}
-.hero h2{font-size:30px;margin-top:10px;}
+.hero h1{
+font-size:38px;
+}
+
+.hero h2{
+font-size:30px;
+margin-top:10px;
+}
 
 .mainLogo{
 width:180px;
@@ -39,14 +45,30 @@ animation:glow 3s infinite alternate;
 }
 
 @keyframes glow{
-0%{filter:drop-shadow(0 0 10px #00c8ff);}
-50%{filter:drop-shadow(0 0 40px #00ffff);}
-100%{filter:drop-shadow(0 0 10px #00c8ff);}
+
+0%{
+filter:drop-shadow(0 0 10px #00c8ff);
+transform:scale(1);
 }
 
-.coming{margin-top:15px;font-size:20px}
+50%{
+filter:drop-shadow(0 0 40px #00ffff);
+transform:scale(1.05);
+}
 
-/* MENU */
+100%{
+filter:drop-shadow(0 0 10px #00c8ff);
+transform:scale(1);
+}
+
+}
+
+.coming{
+margin-top:15px;
+font-size:20px;
+}
+
+/* MENU BOTON */
 
 .menuBtn{
 position:fixed;
@@ -61,7 +83,22 @@ width:30px;
 height:3px;
 background:#00c8ff;
 margin:6px 0;
+transition:0.3s;
 }
+
+.menuBtn.active div:nth-child(1){
+transform:rotate(45deg) translate(5px,5px);
+}
+
+.menuBtn.active div:nth-child(2){
+opacity:0;
+}
+
+.menuBtn.active div:nth-child(3){
+transform:rotate(-45deg) translate(6px,-6px);
+}
+
+/* MENU */
 
 .menu{
 position:fixed;
@@ -89,36 +126,51 @@ background:#00c8ff;
 color:black;
 }
 
-.menu.active{right:0}
+.menu.active{
+right:0;
+}
 
-/* POPUPS */
+/* POPUP */
 
 .popup{
+
 position:fixed;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
+
 width:320px;
 max-width:80%;
+
 background:#020617;
 border:1px solid #00c8ff;
 border-radius:10px;
+
 padding:20px;
+
 display:none;
+
 z-index:6;
+
 cursor:move;
+
 }
 
-.popup.show{display:block}
+.popup.show{
+display:block;
+}
 
 .popupHeader{
 display:flex;
 justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
 }
 
 .closeBtn{
 cursor:pointer;
 color:#00c8ff;
+font-size:18px;
 }
 
 /* MODO ROJO */
@@ -144,33 +196,7 @@ border:1px solid #ff3030;
 filter:drop-shadow(0 0 25px #ff3030);
 }
 
-/* CEO PANEL */
-
-#ceoPanel{
-width:650px;
-max-width:95%;
-border:1px solid #a020f0;
-background:#140020;
-}
-
-.ceoGrid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-margin-top:10px;
-}
-
-.ceoBtn{
-background:#1e0030;
-border:1px solid #a020f0;
-padding:15px;
-cursor:pointer;
-}
-
-.ceoBtn:hover{
-background:#a020f0;
-color:black;
-}
+/* CANVAS */
 
 canvas{
 position:fixed;
@@ -178,6 +204,8 @@ top:0;
 left:0;
 z-index:-1;
 }
+
+/* FOOTER */
 
 footer{
 position:fixed;
@@ -188,6 +216,7 @@ opacity:0.6;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -201,7 +230,7 @@ opacity:0.6;
 <div class="menu" id="menu">
 
 <a onclick="future()">Inicio</a>
-<a onclick="openSessionPopup()">Sesión</a>
+<a onclick="future()">Sesión</a>
 <a onclick="future()">Tecnología</a>
 <a onclick="future()">Proyectos</a>
 <a onclick="future()">Contacto</a>
@@ -209,53 +238,17 @@ opacity:0.6;
 
 </div>
 
-<!-- POPUP MENSAJE -->
-
 <div class="popup" id="popup">
 
 <div class="popupHeader">
+
 <b>Estado del sistema</b>
+
 <div class="closeBtn" onclick="closePopup()">✕</div>
+
 </div>
 
 <div id="typing"></div>
-
-</div>
-
-<!-- CEO PANEL -->
-
-<div class="popup" id="ceoPanel">
-
-<div class="popupHeader">
-<b>Panel Ejecutivo CEO</b>
-<div class="closeBtn" onclick="closeCEO()">✕</div>
-</div>
-
-<div class="ceoGrid">
-
-<div class="ceoBtn" onclick="future()">Gestión de usuarios</div>
-<div class="ceoBtn" onclick="future()">Centro de proyectos</div>
-<div class="ceoBtn" onclick="future()">Laboratorio IA</div>
-<div class="ceoBtn" onclick="future()">Control servidores</div>
-<div class="ceoBtn" onclick="future()">Seguridad del sistema</div>
-<div class="ceoBtn" onclick="openTerminal()">Terminal tecnológica</div>
-<div class="ceoBtn" onclick="future()">Analítica</div>
-<div class="ceoBtn" onclick="future()">Desarrollo interno</div>
-
-</div>
-
-</div>
-
-<!-- TERMINAL -->
-
-<div class="popup" id="terminalPopup">
-
-<div class="popupHeader">
-<b>Terminal del sistema</b>
-<div class="closeBtn" onclick="closeTerminal()">✕</div>
-</div>
-
-<div id="terminalText" style="font-family:monospace;color:#00ff88"></div>
 
 </div>
 
@@ -283,120 +276,90 @@ Próximamente
 /* MENU */
 
 function toggleMenu(){
-document.getElementById("menu").classList.toggle("active")
+
+document.getElementById("menu").classList.toggle("active");
+document.getElementById("menuBtn").classList.toggle("active");
+
 }
 
-/* POPUP MENSAJE */
+/* POPUP */
 
 function future(){
 
-let popup=document.getElementById("popup")
-let text=document.getElementById("typing")
+let popup=document.getElementById("popup");
+let text=document.getElementById("typing");
 
-popup.classList.add("show")
+popup.classList.add("show");
 
-let message="Esta sección se encuentra en desarrollo... Próximamente disponible."
+let message="Esta sección se encuentra en desarrollo... Próximamente disponible.";
 
-text.innerHTML=""
-
-let i=0
+text.innerHTML="";
+let i=0;
 
 let typing=setInterval(()=>{
 
-text.innerHTML+=message[i]
+text.innerHTML+=message[i];
+i++;
 
-i++
+if(i>=message.length) clearInterval(typing);
 
-if(i>=message.length) clearInterval(typing)
-
-},35)
+},35);
 
 }
 
 function closePopup(){
-document.getElementById("popup").classList.remove("show")
+document.getElementById("popup").classList.remove("show");
 }
 
-/* MODO SISTEMA */
+/* POPUP ARRASTRABLE */
 
-let mode="blue"
+let popup=document.getElementById("popup");
+
+let offsetX=0;
+let offsetY=0;
+let isDown=false;
+
+popup.addEventListener("mousedown",e=>{
+
+isDown=true;
+
+offsetX=e.clientX-popup.offsetLeft;
+offsetY=e.clientY-popup.offsetTop;
+
+});
+
+document.addEventListener("mouseup",()=>{
+
+isDown=false;
+
+});
+
+document.addEventListener("mousemove",e=>{
+
+if(!isDown) return;
+
+popup.style.left=(e.clientX-offsetX)+"px";
+popup.style.top=(e.clientY-offsetY)+"px";
+
+popup.style.transform="none";
+
+});
+
+/* MODO */
+
+let mode="blue";
 
 function toggleMode(){
 
 if(mode==="blue"){
-mode="red"
-document.body.classList.add("redMode")
-}else{
-mode="blue"
-document.body.classList.remove("redMode")
-}
 
-}
-
-/* CEO */
-
-function openCEO(){
-document.getElementById("ceoPanel").classList.add("show")
-}
-
-function closeCEO(){
-document.getElementById("ceoPanel").classList.remove("show")
-}
-
-/* TERMINAL */
-
-function openTerminal(){
-
-let popup=document.getElementById("terminalPopup")
-let text=document.getElementById("terminalText")
-
-popup.classList.add("show")
-
-let msg=`Conectando con servidores...
-Verificando seguridad...
-Acceso autorizado.
-Sistema en desarrollo.
-Funciones avanzadas disponibles próximamente.`
-
-text.innerHTML=""
-
-let i=0
-
-let typing=setInterval(()=>{
-text.innerHTML+=msg[i]
-i++
-if(i>=msg.length) clearInterval(typing)
-},25)
-
-}
-
-function closeTerminal(){
-document.getElementById("terminalPopup").classList.remove("show")
-}
-
-/* SESSION */
-
-function openSessionPopup(){
-
-let code=prompt("Ingrese código de acceso")
-
-if(code==="07811"){
-
-let pass=prompt("Contraseña CEO")
-
-if(pass==="lordall78"){
-
-openCEO()
+mode="red";
+document.body.classList.add("redMode");
 
 }else{
 
-alert("Contraseña incorrecta")
-
-}
-
-}else{
-
-alert("Código incorrecto")
+mode="blue";
+document.body.classList.remove("redMode");
 
 }
 
@@ -404,24 +367,27 @@ alert("Código incorrecto")
 
 /* FONDO TECNOLOGICO */
 
-const canvas=document.getElementById("bg")
-const ctx=canvas.getContext("2d")
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
 
 function resize(){
-canvas.width=window.innerWidth
-canvas.height=window.innerHeight
-createNodes()
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+createNodes();
+
 }
 
-window.addEventListener("resize",resize)
+window.addEventListener("resize",resize);
 
-let nodes=[]
+let nodes=[];
 
 function createNodes(){
 
-nodes=[]
+nodes=[];
 
-let density=(canvas.width*canvas.height)/4500
+let density=(canvas.width*canvas.height)/4500;
 
 for(let i=0;i<density;i++){
 
@@ -429,66 +395,68 @@ nodes.push({
 
 x:Math.random()*canvas.width,
 y:Math.random()*canvas.height,
-vx:(Math.random()-0.5)*(mode==="red"?1:0.5),
-vy:(Math.random()-0.5)*(mode==="red"?1:0.5)
+vx:(Math.random()-0.5)*0.5,
+vy:(Math.random()-0.5)*0.5
 
-})
-
-}
+});
 
 }
 
-resize()
+}
+
+resize();
 
 function animate(){
 
-ctx.clearRect(0,0,canvas.width,canvas.height)
+ctx.clearRect(0,0,canvas.width,canvas.height);
 
 nodes.forEach(n=>{
 
-n.x+=n.vx
-n.y+=n.vy
+n.x+=n.vx;
+n.y+=n.vy;
 
-if(n.x<0||n.x>canvas.width) n.vx*=-1
-if(n.y<0||n.y>canvas.height) n.vy*=-1
+if(n.x<0||n.x>canvas.width) n.vx*=-1;
+if(n.y<0||n.y>canvas.height) n.vy*=-1;
 
-ctx.beginPath()
-ctx.arc(n.x,n.y,2,0,Math.PI*2)
-ctx.fillStyle=mode==="red"?"#ff4040":"#00c8ff"
-ctx.fill()
+ctx.beginPath();
+ctx.arc(n.x,n.y,2,0,Math.PI*2);
+ctx.fillStyle=mode==="red" ? "#ff4040" : "#00c8ff";
+ctx.fill();
 
 nodes.forEach(n2=>{
 
-let dx=n.x-n2.x
-let dy=n.y-n2.y
-let dist=Math.sqrt(dx*dx+dy*dy)
+let dx=n.x-n2.x;
+let dy=n.y-n2.y;
+
+let dist=Math.sqrt(dx*dx+dy*dy);
 
 if(dist<180){
 
-let depth=1-(dist/180)
+let depth=1-(dist/180);
 
-ctx.beginPath()
-ctx.moveTo(n.x,n.y)
-ctx.lineTo(n2.x,n2.y)
+ctx.beginPath();
+ctx.moveTo(n.x,n.y);
+ctx.lineTo(n2.x,n2.y);
 
 ctx.strokeStyle=mode==="red"
-?`rgba(255,60,60,${depth})`
-:`rgba(0,200,255,${depth})`
+? "rgba(255,60,60,"+depth+")"
+: "rgba(0,200,255,"+depth+")";
 
-ctx.lineWidth=depth*2
-ctx.stroke()
+ctx.lineWidth=depth*2;
 
-}
-
-})
-
-})
-
-requestAnimationFrame(animate)
+ctx.stroke();
 
 }
 
-animate()
+});
+
+});
+
+requestAnimationFrame(animate);
+
+}
+
+animate();
 
 </script>
 
