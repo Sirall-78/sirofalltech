@@ -1,0 +1,195 @@
+<! HTML DOCTYPE>
+<html lang="es">
+<cabeza>
+<meta charset="UTF-8">
+<título>Sir Of All Tec</título>
+
+<enlace href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="hoja de estilo">
+
+<Estilo>
+
+Cuerpo{
+margen: 0;
+familia de fuentes: 'Orbitron', sans-serif;
+Antecedentes:#030712;
+color: blanco;
+desbordamiento: oculto;
+transición:0.4s;
+}
+
+/* HÉROE */
+
+. Héroe{
+Altura: 100VH;
+pantalla:flex;
+dirección-flexible:columna;
+justificar-contenido:centro;
+alinear-ítems:centro;
+text-align:center;
+}
+
+. Hero H1{
+Tamaño-fuente:38px;
+}
+
+. Hero H2{
+tamaño-fuente:30px;
+Margen-Arriba: 10px;
+}
+
+. mainLogo{
+ancho: 180px;
+Margen-Arriba:20px;
+filter:drop-shadow(0 0 15px #00c8ff);
+Animación: Glow 3s Infinite Alternate;
+}
+
+@keyframes resplandor{
+
+0%{
+filter:drop-shadow(0 0 10px #00c8ff);
+transformación:escala(1);
+}
+
+50%{
+filter:drop-shadow(0 0 40px #00ffff);
+transformación:escala(1.05);
+}
+
+100%{
+filter:drop-shadow(0 0 10px #00c8ff);
+transformación:escala(1);
+}
+
+}
+
+. Ya voy{
+Margen-Máximo: 15px;
+Tamaño-fuente:20px;
+}
+
+/* MENÚ BOTON */
+
+. menuBtn{
+posición: fija;
+derecha:25px;
+<!-- Popup de ingreso de código -->
+<div class="popup" id="codeCodePopup">
+  <div class="popupHeader">
+    <b>Ingresar código de acceso</b>
+    <div class="closeBtn" onclick="closeCodePopup()">✕</div>
+  </div>
+  <input type="text" id="accessCode" placeholder="Escribe tu código..." maxlength="10" estilo="ancho:100%; acolchado: 10px; margen arriba: 10px; tamaño-fuente:16px;">
+  <button onclick="submitCode()" style="margin-top:10px; relleno: 10px 20px; cursor:apuntador; Antecedentes:#00c8ff; color: negro; frontera: ninguna; font-weight:negrita;" >Ingresar</botón>
+  <div id="codeMessage" style="margin-top:15px;" ></div>
+</div>
+
+<!-- Popup de interfaz de usuario -->
+<div class="popup" id="interfaz de usuario" style="width:500px; ancho máximo:90%;">
+  <div class="popupHeader">
+    <b id="uiTitle">Bienvenido</b>
+    <div class="closeBtn" onclick="closeUserInterface()">✕</div>
+  </div>
+  <div id="uiContent" style="margin-top:10px; font-size:16px;" ></div>
+</div>
+
+<Guion>
+
+Lista de palabras ofensivas simples (puedes ampliar)
+const banedWords = ["fuck", "shit", "bitch", "ass", "pendejo", "idiota", "mierda", "culo", "cabron", "gay", "vrg", v" ];
+
+Abrir popup al tocar "Sesión"
+función openSessionPopup(){
+  closePopup();   cierra el popup anterior si está abierto
+  documentar.getElementById("codePopup").ListaClase.añadir("show");
+  documentar.getElementById("accessCode").Valor="";
+  documentar.getElementById("codeMessage").innerHTML="";
+}
+
+Cerrar popup de código
+función closeCodePopup(){
+  documentar.getElementById("codePopup").ListaClase.remove("mostrar");
+}
+
+Cerrar popup de interfaz de usuario
+función closeInterfaz de usuario(){
+  documentar.getElementById("interfazUsuario").ListaClase.remove("mostrar");
+}
+
+Función para validar código
+función submitCode(){
+  Let Code = documentar.getElementById("accessCode").Valor.Acabado();
+  Sea MSG = documentar.getElementById("codeMessage");
+
+  if(código==="67067"){
+    Código especial 67067
+    openUserInterface ("Belman", "Belman bienvenido a Sir Of All Tec.""Próximamente podrías acceder a más funciones no oldides tu codigo. En caso de querer un cambio de cogigo manda un correo al sirofalltec@gamail.com");
+    closeCodePopup();
+  } else if(code==="52370"){
+    Código que pide nombre clave
+    let userName = prompt("Ingresa tu nombre clave (máx 10 letras)").Acabado();
+    ¡si(!Nombre de usuario){
+      MSG.innerHTML = "Debes ingresar un nombre válido.";
+      Regreso;
+    }
+    if (nombre de usuario.longitud>10){
+      MSG.innerHTML = "Nombre demasiado largo.";
+      Regreso;
+    }
+    Filtro simple
+    let lowerName = userName.toLowerCase();
+    for(let word of bannedWords){
+      if(lowerName.includes(word)){
+        msg.innerHTML = "Nombre no permitido.";
+        Regreso;
+      }
+    }
+    openUserInterface(userName,Bienvenid@ ${userName} a Sir Of All Tec.,"Próximamente podrás acceder a nuevas funciones.");
+    closeCodePopup();
+  } else if(code==="07811"){
+    // Opciones de CEO / empleado
+    let choice = prompt("Elige modo: 'CEO' o 'Empleado'").trim().toLowerCase();
+    if(choice==="empleado"){
+      openUserInterface("Aldo"," Aldo Bienvenido a Sir Of All Tec.","Próximamente podrás acceder a funciones de desarrollador.");
+      closeCodePopup();
+    } else if(choice==="ceo"){
+      let ceoPass = prompt("Ingresa contraseña de CEO:");
+      if(ceoPass==="lordall78"){
+        // Interfaz CEO avanzada
+        openUserInterface("Aldo (CEO)","Aldo Bienvenido, CEO de Sir Of All Tec.","Interfaz de administrador: aquí podrás gestionar usuarios, proyectos y más, en futuras actualizaciónes.");
+        closeCodePopup();
+      } si no, {
+        msg.innerHTML = "Contraseña incorrecta.";
+      }
+    } si no, {
+      msg.innerHTML = "Opción inválida.";
+    }
+  } si no, {
+    msg.innerHTML = "Código incorrecto.";
+  }
+}
+
+Función para abrir popup de interfaz
+function openUserInterface(name,title,message){
+  let ui=document.getElementById("userInterface");
+  document.getElementById("uiTitle").innerText=title;
+  document.getElementById("uiContent").innerHTML="";
+  ui.classList.add("show");
+
+  Tipificación efecto
+  Sea i=0;
+  let interval=setInterval(()=>{
+    document.getElementById("uiContent").innerHTML += message.charAt(i);
+    i++;
+    if(i>=message.length) clearInterval(interval);
+  },35);
+}
+
+Vincular "Sesión" del menú
+document.querySelectorAll(".menu a").forEach(el=>{
+  if(el.innerText.toLowerCase().includes("sesión")){
+    el.addEventListener("click", openSessionPopup);
+  }
+});
+
+</Guion>
