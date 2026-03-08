@@ -4,216 +4,81 @@
 <meta charset="UTF-8">
 <title>Sir Of All Tec</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-
 <style>
 
 body{
+font-family:Arial;
+background:#0a0a0a;
+color:white;
+text-align:center;
 margin:0;
-font-family:'Orbitron',sans-serif;
-background:#030712;
-color:white;
-overflow:hidden;
-transition:0.4s;
 }
 
-/* HERO */
-
-.hero{
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
-}
-
-.hero h1{
-font-size:38px;
-}
-
-.hero h2{
-font-size:30px;
-margin-top:10px;
-}
-
-.mainLogo{
-width:180px;
-margin-top:20px;
-filter:drop-shadow(0 0 15px #00c8ff);
-animation:glow 3s infinite alternate;
-}
-
-@keyframes glow{
-
-0%{filter:drop-shadow(0 0 10px #00c8ff);}
-50%{filter:drop-shadow(0 0 40px #00ffff);}
-100%{filter:drop-shadow(0 0 10px #00c8ff);}
-
-}
-
-.coming{
-margin-top:15px;
-font-size:20px;
-}
-
-/* MENU */
-
-.menuBtn{
-position:fixed;
-right:25px;
-top:25px;
-cursor:pointer;
-z-index:5;
-}
-
-.menuBtn div{
-width:30px;
-height:3px;
-background:#00c8ff;
-margin:6px 0;
-}
-
-.menu{
-position:fixed;
-right:-260px;
-top:0;
-width:260px;
-height:100%;
-background:#020617;
-padding-top:100px;
-transition:0.4s;
-}
-
-.menu a{
-display:block;
+header{
+background:#111;
 padding:20px;
-color:white;
-text-decoration:none;
-border-bottom:1px solid rgba(255,255,255,0.1);
-cursor:pointer;
+font-size:28px;
+font-weight:bold;
+border-bottom:2px solid #00ffff;
 }
 
-.menu a:hover{
-background:#00c8ff;
-color:black;
+.container{
+margin-top:40px;
 }
 
-.menu.active{
-right:0;
-}
-
-/* MODO SISTEMA */
-
-.redMode{
-background:#0b0000;
-}
-
-.redMode .menuBtn div{
-background:#ff4040;
-}
-
-.redMode .mainLogo{
-filter:drop-shadow(0 0 25px #ff3030);
-}
-
-/* PANEL LATERAL */
-
-.systemPanel{
-
-position:fixed;
-left:0;
-top:0;
-height:100%;
-width:260px;
-background:#020617;
-padding:20px;
-display:none;
-
-}
-
-.systemPanel.show{
-display:block;
-}
-
-.systemPanel p{
-font-size:14px;
-}
-
-/* CEO DASHBOARD */
-
-.ceoPanel{
-
-position:fixed;
-right:0;
-top:0;
-height:100%;
-width:350px;
-
-background:#020617;
-
-padding:20px;
-
-display:none;
-
-}
-
-.ceoPanel.show{
-display:block;
-}
-
-.ceoBtn{
-
-display:block;
-width:100%;
+input{
 padding:10px;
-margin-top:10px;
-background:#ff4040;
+margin:10px;
 border:none;
-color:white;
+border-radius:6px;
+width:200px;
+}
+
+button{
+padding:10px 20px;
+border:none;
+border-radius:6px;
+background:#00ffff;
 cursor:pointer;
-
+font-weight:bold;
 }
 
-.ceoOutput{
-
-margin-top:20px;
-padding:10px;
-border:1px solid #ff4040;
-
+button:hover{
+background:#00cccc;
 }
 
-/* POPUP */
-
-.popup{
-position:fixed;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-background:#020617;
-border:1px solid #00c8ff;
-padding:20px;
+.panel{
 display:none;
-z-index:10;
+margin-top:30px;
 }
 
-.popup.show{
-display:block;
+.card{
+background:#111;
+padding:20px;
+margin:15px auto;
+width:260px;
+border-radius:10px;
+box-shadow:0 0 10px #00ffff55;
 }
 
-canvas{
-position:fixed;
-top:0;
-left:0;
-z-index:-1;
+.ceo-panel{
+display:none;
+margin-top:30px;
 }
 
-footer{
-position:fixed;
-bottom:40px;
-width:100%;
-text-align:center;
-opacity:0.6;
+.ceo-box{
+background:#111;
+padding:25px;
+margin:20px auto;
+width:320px;
+border-radius:10px;
+box-shadow:0 0 20px #ffcc00;
+}
+
+.status{
+margin-top:20px;
+color:#00ffff;
+font-weight:bold;
 }
 
 </style>
@@ -221,352 +86,143 @@ opacity:0.6;
 
 <body>
 
-<div class="menuBtn" onclick="toggleMenu()">
-<div></div>
-<div></div>
-<div></div>
-</div>
+<header>
+Sir Of All Tec
+</header>
 
-<div class="menu" id="menu">
+<div class="container">
 
-<a onclick="future()">Inicio</a>
-<a onclick="openSession()">Sesión</a>
-<a onclick="future()">Tecnología</a>
-<a onclick="future()">Proyectos</a>
-<a onclick="future()">Contacto</a>
-<a onclick="toggleMode()">Modo Sistema</a>
+<h2>Bienvenido a Sir Of All Tec</h2>
+<p>La plataforma tecnológica del futuro.</p>
 
-</div>
+<p style="color:#aaa;">Algunas funciones estarán disponibles próximamente.</p>
 
-<div class="systemPanel" id="systemPanel">
+<div id="login">
 
-<h3>Funciones del sistema</h3>
+<input id="user" placeholder="Usuario">
+<br>
 
-<p>Laboratorio IA — Próximamente</p>
-<p>Control de servidores — Próximamente</p>
-<p>Repositorio tecnológico — Próximamente</p>
-<p>Gestión de proyectos — Próximamente</p>
-<p>Seguridad del sistema — Próximamente</p>
-<p>Centro de innovación — Próximamente</p>
-<p>Red global — Próximamente</p>
+<input id="pass" type="password" placeholder="Contraseña">
+<br>
 
-<button onclick="logout()">Cambiar de cuenta</button>
+<button onclick="login()">Ingresar</button>
 
-</div>
+<p id="mensaje" class="status"></p>
 
-<div class="ceoPanel" id="ceoPanel">
-
-<h3>Panel CEO</h3>
-
-<button class="ceoBtn" onclick="ceoAction('servidores')">Estado de servidores</button>
-<button class="ceoBtn" onclick="ceoAction('empleados')">Gestión de empleados</button>
-<button class="ceoBtn" onclick="ceoAction('innovacion')">Centro de innovación</button>
-<button class="ceoBtn" onclick="ceoAction('seguridad')">Seguridad del sistema</button>
-<button class="ceoBtn" onclick="ceoAction('proyectos')">Control de proyectos</button>
-<button class="ceoBtn" onclick="ceoAction('red')">Red global</button>
-
-<div class="ceoOutput" id="ceoOutput">
-
-Sistema CEO activo.
-
-</div>
-
-<button class="ceoBtn" onclick="logout()">Cambiar de cuenta</button>
-
-</div>
-
-<div class="popup" id="login">
-
-<h3>Ingresa código</h3>
-
-<input id="code">
-
-<button onclick="checkCode()">Entrar</button>
-
-<p id="msg"></p>
-
-</div>
-
-<canvas id="bg"></canvas>
-
-<div class="hero">
-
-<h1>Hola, bienvenido a</h1>
-<h2>Sir Of All Tec</h2>
-
-<img src="logo.png" class="mainLogo">
-
-<div class="coming">
-Próximamente
 </div>
 
 </div>
 
-<footer>
-© SIROFALLTECH
-</footer>
+<!-- PANEL USUARIO -->
+
+<div id="panelUsuario" class="panel">
+
+<h2>Panel de Usuario</h2>
+
+<div class="card">
+<h3>Explorar</h3>
+<p>Descubre herramientas tecnológicas.</p>
+<button onclick="proximamente()">Abrir</button>
+</div>
+
+<div class="card">
+<h3>Proyectos</h3>
+<p>Administra tus proyectos.</p>
+<button onclick="proximamente()">Abrir</button>
+</div>
+
+<div class="card">
+<h3>Configuración</h3>
+<p>Ajustes de cuenta.</p>
+<button onclick="proximamente()">Abrir</button>
+</div>
+
+</div>
+
+<!-- PANEL CEO -->
+
+<div id="panelCEO" class="ceo-panel">
+
+<h2>Panel Ejecutivo CEO</h2>
+
+<div class="ceo-box">
+
+<h3>Control del Sistema</h3>
+
+<button onclick="mensajeCEO('Sistema revisado correctamente')">
+Estado del sistema
+</button>
+
+<br><br>
+
+<button onclick="mensajeCEO('Nueva función activada')">
+Activar función
+</button>
+
+<br><br>
+
+<button onclick="mensajeCEO('Actualización programada')">
+Programar actualización
+</button>
+
+<br><br>
+
+<button onclick="mensajeCEO('Panel reiniciado correctamente')">
+Reiniciar panel
+</button>
+
+<p id="estadoCEO" class="status"></p>
+
+</div>
+
+</div>
 
 <script>
 
-/* MENU */
+function login(){
 
-function toggleMenu(){
-document.getElementById("menu").classList.toggle("active");
-}
+let user=document.getElementById("user").value
+let pass=document.getElementById("pass").value
+let mensaje=document.getElementById("mensaje")
 
-let system=false;
+if(user=="ceo" && pass=="admin"){
 
-/* MODO SISTEMA */
+mensaje.innerHTML="Acceso CEO concedido"
 
-function toggleMode(){
+document.getElementById("login").style.display="none"
 
-system=!system;
-
-if(system){
-document.body.classList.add("redMode");
-}else{
-document.body.classList.remove("redMode");
-}
+document.getElementById("panelCEO").style.display="block"
 
 }
 
-/* LOGIN */
+else if(user!="" && pass!=""){
 
-function openSession(){
+mensaje.innerHTML="Bienvenido a Sir Of All Tec"
 
-if(!system){
+document.getElementById("login").style.display="none"
 
-alert("Activa primero el modo sistema.");
-
-return;
-
-}
-
-document.getElementById("login").classList.add("show");
-
-}
-
-/* CODIGOS */
-
-function checkCode(){
-
-let code=document.getElementById("code").value;
-
-if(code==="67067"){
-
-startSession("Belman");
-
-}
-
-else if(code==="52370"){
-
-let name=prompt("Nombre clave (máx 10)");
-
-startSession(name);
-
-}
-
-else if(code==="07811"){
-
-let pass=prompt("Contraseña");
-
-if(pass==="aldo78"){
-
-startSession("Aldo");
-
-}
-
-else if(pass==="lordall78"){
-
-startSession("CEO");
+document.getElementById("panelUsuario").style.display="block"
 
 }
 
 else{
 
-alert("Contraseña incorrecta");
+mensaje.innerHTML="Ingrese usuario y contraseña"
 
 }
 
 }
 
-}
+function proximamente(){
 
-/* SESION */
-
-function startSession(user){
-
-if(user==="Belman"){
-
-alert("Belman, bienvenido al sistema interno de Sir Of All Tec.\nTu sesión ha sido iniciada correctamente.");
+alert("Esta función estará disponible próximamente")
 
 }
 
-else if(user==="Aldo"){
+function mensajeCEO(texto){
 
-alert("Bienvenido Aldo al sistema interno de Sir Of All Tec.\nSesión de empleado iniciada.");
+document.getElementById("estadoCEO").innerHTML=texto
 
-}
-
-else if(user==="CEO"){
-
-alert("Bienvenido Aldo.\nAcceso ejecutivo autorizado.");
-
-document.getElementById("ceoPanel").classList.add("show");
-
-return;
-
-}
-
-else{
-
-alert("Bienvenido "+user+" al sistema interno de Sir Of All Tec.");
-
-}
-
-document.getElementById("systemPanel").classList.add("show");
-
-document.getElementById("login").classList.remove("show");
-
-}
-
-/* CEO INTERACCION */
-
-function ceoAction(type){
-
-let out=document.getElementById("ceoOutput");
-
-if(type==="servidores"){
-out.innerHTML="Estado de servidores: estable.<br>Expansión global próximamente.";
-}
-
-if(type==="empleados"){
-out.innerHTML="Sistema de gestión de empleados en desarrollo.";
-}
-
-if(type==="innovacion"){
-out.innerHTML="Centro de innovación tecnológica en desarrollo.";
-}
-
-if(type==="seguridad"){
-out.innerHTML="Sistema de seguridad avanzada en desarrollo.";
-}
-
-if(type==="proyectos"){
-out.innerHTML="Panel de control de proyectos próximamente.";
-}
-
-if(type==="red"){
-out.innerHTML="Red global de servidores en expansión.";
-}
-
-}
-
-/* LOGOUT */
-
-function logout(){
-
-document.getElementById("systemPanel").classList.remove("show");
-document.getElementById("ceoPanel").classList.remove("show");
-document.getElementById("login").classList.add("show");
-
-}
-
-/* RED ORIGINAL */
-
-const canvas=document.getElementById("bg");
-const ctx=canvas.getContext("2d");
-
-function resize(){
-
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-
-createNodes();
-
-}
-
-window.addEventListener("resize",resize);
-
-let nodes=[];
-
-function createNodes(){
-
-nodes=[];
-
-let density=(canvas.width*canvas.height)/4500;
-
-for(let i=0;i<density;i++){
-
-nodes.push({
-
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-vx:(Math.random()-0.5)*0.5,
-vy:(Math.random()-0.5)*0.5
-
-});
-
-}
-
-}
-
-resize();
-
-function animate(){
-
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
-nodes.forEach(n=>{
-
-n.x+=n.vx;
-n.y+=n.vy;
-
-if(n.x<0||n.x>canvas.width) n.vx*=-1;
-if(n.y<0||n.y>canvas.height) n.vy*=-1;
-
-ctx.beginPath();
-ctx.arc(n.x,n.y,2,0,Math.PI*2);
-ctx.fillStyle=system ? "#ff4040" : "#00c8ff";
-ctx.fill();
-
-nodes.forEach(n2=>{
-
-let dx=n.x-n2.x;
-let dy=n.y-n2.y;
-
-let dist=Math.sqrt(dx*dx+dy*dy);
-
-if(dist<180){
-
-let depth=1-(dist/180);
-
-ctx.beginPath();
-ctx.moveTo(n.x,n.y);
-ctx.lineTo(n2.x,n2.y);
-
-ctx.strokeStyle=system
-? "rgba(255,60,60,"+depth+")"
-: "rgba(0,200,255,"+depth+")";
-
-ctx.lineWidth=depth*2;
-
-ctx.stroke();
-
-}
-
-});
-
-});
-
-requestAnimationFrame(animate);
-
-}
-
-animate();
-
-function future(){
-alert("Sección en desarrollo.");
 }
 
 </script>
