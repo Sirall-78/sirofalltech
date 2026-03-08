@@ -17,8 +17,6 @@ overflow:hidden;
 transition:0.4s;
 }
 
-/* HERO */
-
 .hero{
 height:100vh;
 display:flex;
@@ -39,14 +37,12 @@ animation:glow 3s infinite alternate;
 }
 
 @keyframes glow{
-0%{filter:drop-shadow(0 0 10px #00c8ff);transform:scale(1);}
-50%{filter:drop-shadow(0 0 40px #00ffff);transform:scale(1.05);}
-100%{filter:drop-shadow(0 0 10px #00c8ff);transform:scale(1);}
+0%{filter:drop-shadow(0 0 10px #00c8ff);}
+50%{filter:drop-shadow(0 0 40px #00ffff);}
+100%{filter:drop-shadow(0 0 10px #00c8ff);}
 }
 
 .coming{margin-top:15px;font-size:20px;}
-
-/* MENU BOTON */
 
 .menuBtn{
 position:fixed;
@@ -75,8 +71,6 @@ opacity:0;
 .menuBtn.active div:nth-child(3){
 transform:rotate(-45deg) translate(6px,-6px);
 }
-
-/* MENU */
 
 .menu{
 position:fixed;
@@ -108,8 +102,6 @@ color:black;
 right:0;
 }
 
-/* POPUPS */
-
 .popup{
 position:fixed;
 top:50%;
@@ -123,7 +115,6 @@ border-radius:10px;
 padding:20px;
 display:none;
 z-index:6;
-cursor:move;
 }
 
 .popup.show{
@@ -143,8 +134,6 @@ color:#00c8ff;
 font-size:18px;
 }
 
-/* MODO ROJO */
-
 .redMode{
 background:#0b0000;
 }
@@ -162,20 +151,12 @@ color:white;
 border:1px solid #ff3030;
 }
 
-.redMode .mainLogo{
-filter:drop-shadow(0 0 25px #ff3030);
-}
-
-/* CANVAS */
-
 canvas{
 position:fixed;
 top:0;
 left:0;
 z-index:-1;
 }
-
-/* FOOTER */
 
 footer{
 position:fixed;
@@ -224,19 +205,45 @@ Próximamente
 © SIROFALLTECH
 </footer>
 
+<div class="popup" id="codePopup">
+
+<div class="popupHeader">
+<b>Ingresar código</b>
+<div class="closeBtn" onclick="closeCodePopup()">✕</div>
+</div>
+
+<input id="accessCode" placeholder="Código">
+
+<button onclick="submitCode()">Ingresar</button>
+
+<div id="codeMessage"></div>
+
+</div>
+
+<div class="popup" id="userInterface">
+
+<div class="popupHeader">
+<b id="uiTitle"></b>
+<div class="closeBtn" onclick="closeUserInterface()">✕</div>
+</div>
+
+<div id="uiContent"></div>
+
+</div>
+
 <script>
 
 /* MENU */
 
 function toggleMenu(){
-document.getElementById("menu").classList.toggle("active");
-document.getElementById("menuBtn").classList.toggle("active");
+menu.classList.toggle("active")
+menuBtn.classList.toggle("active")
 }
 
-/* MENSAJE FUTURO */
+/* FUTURO */
 
 function future(){
-alert("Esta sección estará disponible próximamente.");
+alert("Sección en desarrollo")
 }
 
 /* MODOS */
@@ -262,85 +269,200 @@ document.body.classList.remove("redMode")
 
 }
 
-/* CANVAS TECNOLOGICO */
+/* SESION */
+
+function openSessionPopup(){
+
+if(!systemMode){
+future()
+return
+}
+
+codePopup.classList.add("show")
+
+}
+
+function closeCodePopup(){
+codePopup.classList.remove("show")
+}
+
+function closeUserInterface(){
+userInterface.classList.remove("show")
+}
+
+/* CODIGOS */
+
+function submitCode(){
+
+let code=accessCode.value.trim()
+
+if(code==="67067"){
+
+openUserInterface(
+"Belman",
+"Belman Bienvenido",
+"Acceso concedido"
+)
+
+}
+
+else if(code==="52370"){
+
+let name=prompt("Ingresa tu nombre")
+
+if(!name) return
+
+openUserInterface(
+name,
+"Bienvenido "+name,
+"Acceso limitado"
+)
+
+}
+
+else if(code==="07811"){
+
+let pass=prompt("Contraseña CEO")
+
+if(pass==="lordall78"){
+
+openUserInterface(
+"Aldo CEO",
+"Bienvenido CEO",
+"Panel administrador"
+)
+
+}else{
+
+codeMessage.innerHTML="Contraseña incorrecta"
+
+}
+
+}
+
+else{
+
+codeMessage.innerHTML="Código incorrecto"
+
+}
+
+}
+
+/* INTERFAZ */
+
+function openUserInterface(name,title,message){
+
+uiTitle.innerText=title
+uiContent.innerText=message
+
+userInterface.classList.add("show")
+
+closeCodePopup()
+
+}
+
+/* ===== FONDO JARVIS 3D ===== */
 
 const canvas=document.getElementById("bg")
 const ctx=canvas.getContext("2d")
 
-function resize(){
+canvas.width=innerWidth
+canvas.height=innerHeight
 
-canvas.width=window.innerWidth
-canvas.height=window.innerHeight
+window.addEventListener("resize",()=>{
 
-createNodes()
+canvas.width=innerWidth
+canvas.height=innerHeight
 
-}
-
-window.addEventListener("resize",resize)
+})
 
 let nodes=[]
+let total=80
+let angle=0
 
-function createNodes(){
-
-nodes=[]
-
-let density=(canvas.width*canvas.height)/6000
-
-for(let i=0;i<density;i++){
+for(let i=0;i<total;i++){
 
 nodes.push({
 
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-vx:(Math.random()-0.5)*0.6,
-vy:(Math.random()-0.5)*0.6
+x:(Math.random()-0.5)*800,
+y:(Math.random()-0.5)*800,
+z:(Math.random()-0.5)*800,
+
+vx:(Math.random()-0.5)*0.3,
+vy:(Math.random()-0.5)*0.3,
+vz:(Math.random()-0.5)*0.3
 
 })
 
 }
 
+function project(n){
+
+let scale=600/(600+n.z)
+
+return{
+
+x:n.x*scale+canvas.width/2,
+y:n.y*scale+canvas.height/2,
+scale:scale
+
 }
 
-resize()
+}
 
 function animate(){
 
 ctx.clearRect(0,0,canvas.width,canvas.height)
 
-for(let i=0;i<nodes.length;i++){
+angle+=0.002
 
-let n=nodes[i]
+let color=mode==="red"?"#ff4040":"#00c8ff"
+
+for(let n of nodes){
 
 n.x+=n.vx
 n.y+=n.vy
+n.z+=n.vz
 
-if(n.x<0||n.x>canvas.width) n.vx*=-1
-if(n.y<0||n.y>canvas.height) n.vy*=-1
+let cos=Math.cos(angle)
+let sin=Math.sin(angle)
+
+let x=n.x*cos-n.z*sin
+let z=n.x*sin+n.z*cos
+
+n.x=x
+n.z=z
+
+}
+
+for(let i=0;i<nodes.length;i++){
+
+let p1=project(nodes[i])
 
 ctx.beginPath()
-ctx.arc(n.x,n.y,2,0,Math.PI*2)
-ctx.fillStyle=mode==="red"?"#ff4040":"#00c8ff"
+ctx.arc(p1.x,p1.y,2*p1.scale,0,Math.PI*2)
+ctx.fillStyle=color
 ctx.fill()
 
 for(let j=i+1;j<nodes.length;j++){
 
-let m=nodes[j]
+let p2=project(nodes[j])
 
-let dx=n.x-m.x
-let dy=n.y-m.y
+let dx=p1.x-p2.x
+let dy=p1.y-p2.y
+
 let dist=Math.sqrt(dx*dx+dy*dy)
 
-if(dist<120){
+if(dist<130){
 
 ctx.beginPath()
-ctx.moveTo(n.x,n.y)
-ctx.lineTo(m.x,m.y)
+ctx.moveTo(p1.x,p1.y)
+ctx.lineTo(p2.x,p2.y)
 
-ctx.strokeStyle=mode==="red"?
-"rgba(255,60,60,0.25)":
-"rgba(0,200,255,0.25)"
+ctx.strokeStyle=mode==="red"
+?"rgba(255,80,80,0.25)"
+:"rgba(0,200,255,0.25)"
 
-ctx.lineWidth=1
 ctx.stroke()
 
 }
