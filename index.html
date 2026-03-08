@@ -583,4 +583,316 @@ document.querySelectorAll(".menu a").forEach(el=>{
   }
 });
 
-</script>
+let systemMode=false;
+let visualMode="blue";
+
+/* MENU */
+
+function toggleMenu(){
+document.getElementById("menu").classList.toggle("active");
+document.getElementById("menuBtn").classList.toggle("active");
+}
+
+/* MODO SISTEMA */
+
+function toggleMode(){
+
+systemMode=!systemMode;
+
+if(systemMode){
+
+visualMode="purple";
+document.body.classList.add("redMode");
+
+alert("Modo Sistema Activado");
+
+}else{
+
+visualMode="blue";
+document.body.classList.remove("redMode");
+
+alert("Modo Sistema Desactivado");
+
+}
+
+}
+
+/* SESION */
+
+function openSessionPopup(){
+
+if(!systemMode){
+
+futureMessage("El acceso al sistema requiere activar Modo Sistema.");
+
+return;
+
+}
+
+document.getElementById("codePopup").classList.add("show");
+
+}
+
+/* MENSAJE */
+
+function futureMessage(text){
+
+let popup=document.getElementById("popup");
+let typing=document.getElementById("typing");
+
+popup.classList.add("show");
+
+typing.innerHTML="";
+
+let i=0;
+
+let t=setInterval(()=>{
+
+typing.innerHTML+=text[i];
+i++;
+
+if(i>=text.length) clearInterval(t);
+
+},35);
+
+}
+
+/* CODIGOS */
+
+function submitCode(){
+
+let code=document.getElementById("accessCode").value;
+
+if(code==="67067"){
+
+employeePanel("Belman");
+
+}
+
+else if(code==="52370"){
+
+let name=prompt("Ingresa nombre clave (max 10)");
+
+if(!name || name.length>10){
+
+futureMessage("Nombre inválido.");
+return;
+
+}
+
+employeePanel(name);
+
+}
+
+else if(code==="07811"){
+
+let role=prompt("CEO o empleado").toLowerCase();
+
+if(role==="empleado"){
+
+employeePanel("Aldo");
+
+}
+
+else if(role==="ceo"){
+
+let pass=prompt("Contraseña CEO");
+
+if(pass==="lordall78"){
+
+ceoPanel();
+
+}else{
+
+futureMessage("Contraseña incorrecta.");
+
+}
+
+}
+
+}
+
+else{
+
+futureMessage("Código incorrecto.");
+
+}
+
+}
+
+/* PANEL EMPLEADO */
+
+function employeePanel(name){
+
+let ui=document.getElementById("userInterface");
+
+document.getElementById("uiTitle").innerText="Panel Interno";
+
+document.getElementById("uiContent").innerHTML=
+
+`
+<h3>Bienvenido ${name}</h3>
+
+<p>Empleado de Sir Of All Tec</p>
+
+<hr>
+
+<p>Estado de servidores: En desarrollo</p>
+<p>Laboratorio IA: Próximamente</p>
+<p>Repositorio tecnológico: Próximamente</p>
+<p>Centro de proyectos: Próximamente</p>
+<p>Gestión de empleados: Próximamente</p>
+
+`;
+
+ui.classList.add("show");
+
+}
+
+/* PANEL CEO */
+
+function ceoPanel(){
+
+let ui=document.getElementById("userInterface");
+
+document.getElementById("uiTitle").innerText="Panel CEO";
+
+document.getElementById("uiContent").innerHTML=
+
+`
+
+<h2>Bienvenido Aldo</h2>
+
+<p>CEO — Sir Of All Tec</p>
+
+<hr>
+
+<h3>Panel Ejecutivo</h3>
+
+<p>Control global de empresa — Próximamente</p>
+<p>Gestión avanzada de empleados — Próximamente</p>
+<p>Centro de innovación tecnológica — Próximamente</p>
+<p>Laboratorio de Inteligencia Artificial — Próximamente</p>
+<p>Control de seguridad del sistema — Próximamente</p>
+<p>Acceso root del sistema — Próximamente</p>
+
+`;
+
+ui.classList.add("show");
+
+}
+
+/* RED TECNOLOGICA */
+
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
+
+let nodes=[];
+
+function resize(){
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+nodes=[];
+
+let density=(canvas.width*canvas.height)/3500;
+
+for(let i=0;i<density;i++){
+
+nodes.push({
+
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+vx:(Math.random()-0.5)*0.6,
+vy:(Math.random()-0.5)*0.6
+
+});
+
+}
+
+}
+
+resize();
+
+window.addEventListener("resize",resize);
+
+function animate(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+nodes.forEach(n=>{
+
+n.x+=n.vx;
+n.y+=n.vy;
+
+if(n.x<0||n.x>canvas.width) n.vx*=-1;
+if(n.y<0||n.y>canvas.height) n.vy*=-1;
+
+ctx.beginPath();
+ctx.arc(n.x,n.y,2,0,Math.PI*2);
+
+if(visualMode==="purple"){
+
+ctx.fillStyle="#a855f7";
+
+}else{
+
+ctx.fillStyle="#00c8ff";
+
+}
+
+ctx.fill();
+
+nodes.forEach(n2=>{
+
+let dx=n.x-n2.x;
+let dy=n.y-n2.y;
+
+let dist=Math.sqrt(dx*dx+dy*dy);
+
+if(dist<200){
+
+let depth=1-(dist/200);
+
+ctx.beginPath();
+ctx.moveTo(n.x,n.y);
+ctx.lineTo(n2.x,n2.y);
+
+if(visualMode==="purple"){
+
+ctx.strokeStyle="rgba(168,85,247,"+depth+")";
+
+}else{
+
+ctx.strokeStyle="rgba(0,200,255,"+depth+")";
+
+}
+
+ctx.lineWidth=depth*2;
+
+ctx.stroke();
+
+}
+
+});
+
+});
+
+requestAnimationFrame(animate);
+
+}
+
+animate();
+
+/* BOTON SESION */
+
+document.querySelectorAll(".menu a").forEach(el=>{
+
+if(el.innerText.toLowerCase().includes("sesión")){
+
+el.onclick=openSessionPopup;
+
+}
+
+});
