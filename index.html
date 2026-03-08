@@ -28,8 +28,14 @@ align-items:center;
 text-align:center;
 }
 
-.hero h1{font-size:38px;}
-.hero h2{font-size:30px;margin-top:10px;}
+.hero h1{
+font-size:38px;
+}
+
+.hero h2{
+font-size:30px;
+margin-top:10px;
+}
 
 .mainLogo{
 width:180px;
@@ -39,9 +45,22 @@ animation:glow 3s infinite alternate;
 }
 
 @keyframes glow{
-0%{filter:drop-shadow(0 0 10px #00c8ff);transform:scale(1);}
-50%{filter:drop-shadow(0 0 40px #00ffff);transform:scale(1.05);}
-100%{filter:drop-shadow(0 0 10px #00c8ff);transform:scale(1);}
+
+0%{
+filter:drop-shadow(0 0 10px #00c8ff);
+transform:scale(1);
+}
+
+50%{
+filter:drop-shadow(0 0 40px #00ffff);
+transform:scale(1.05);
+}
+
+100%{
+filter:drop-shadow(0 0 10px #00c8ff);
+transform:scale(1);
+}
+
 }
 
 .coming{
@@ -49,7 +68,7 @@ margin-top:15px;
 font-size:20px;
 }
 
-/* MENU */
+/* MENU BOTON */
 
 .menuBtn{
 position:fixed;
@@ -64,7 +83,22 @@ width:30px;
 height:3px;
 background:#00c8ff;
 margin:6px 0;
+transition:0.3s;
 }
+
+.menuBtn.active div:nth-child(1){
+transform:rotate(45deg) translate(5px,5px);
+}
+
+.menuBtn.active div:nth-child(2){
+opacity:0;
+}
+
+.menuBtn.active div:nth-child(3){
+transform:rotate(-45deg) translate(6px,-6px);
+}
+
+/* MENU */
 
 .menu{
 position:fixed;
@@ -75,6 +109,7 @@ height:100%;
 background:#020617;
 padding-top:100px;
 transition:0.4s;
+z-index:4;
 }
 
 .menu a{
@@ -95,20 +130,30 @@ color:black;
 right:0;
 }
 
-/* POPUPS */
+/* POPUP */
 
 .popup{
+
 position:fixed;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
-width:340px;
+
+width:320px;
+max-width:80%;
+
 background:#020617;
 border:1px solid #00c8ff;
 border-radius:10px;
+
 padding:20px;
+
 display:none;
+
 z-index:6;
+
+cursor:move;
+
 }
 
 .popup.show{
@@ -118,15 +163,17 @@ display:block;
 .popupHeader{
 display:flex;
 justify-content:space-between;
+align-items:center;
 margin-bottom:10px;
 }
 
 .closeBtn{
 cursor:pointer;
 color:#00c8ff;
+font-size:18px;
 }
 
-/* MODO SISTEMA */
+/* MODO ROJO */
 
 .redMode{
 background:#0b0000;
@@ -136,33 +183,17 @@ background:#0b0000;
 background:#ff4040;
 }
 
+.redMode .menu a:hover{
+background:#ff3030;
+color:white;
+}
+
 .redMode .popup{
 border:1px solid #ff3030;
 }
 
 .redMode .mainLogo{
 filter:drop-shadow(0 0 25px #ff3030);
-}
-
-/* PANEL TECNOLOGICO */
-
-.techPanel{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-margin-top:10px;
-}
-
-.techBtn{
-padding:10px;
-border:1px solid #00c8ff;
-cursor:pointer;
-text-align:center;
-}
-
-.techBtn:hover{
-background:#00c8ff;
-color:black;
 }
 
 /* CANVAS */
@@ -174,6 +205,8 @@ left:0;
 z-index:-1;
 }
 
+/* FOOTER */
+
 footer{
 position:fixed;
 bottom:40px;
@@ -183,6 +216,7 @@ opacity:0.6;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -194,235 +228,359 @@ opacity:0.6;
 </div>
 
 <div class="menu" id="menu">
+
 <a onclick="future()">Inicio</a>
-<a onclick="openSessionPopup()">Sesión</a>
+<a onclick="future()">Sesión</a>
 <a onclick="future()">Tecnología</a>
 <a onclick="future()">Proyectos</a>
 <a onclick="future()">Contacto</a>
 <a onclick="toggleMode()">Modo Sistema</a>
+
 </div>
 
 <div class="popup" id="popup">
+
 <div class="popupHeader">
+
 <b>Estado del sistema</b>
+
 <div class="closeBtn" onclick="closePopup()">✕</div>
+
 </div>
+
 <div id="typing"></div>
+
 </div>
 
 <canvas id="bg"></canvas>
 
 <div class="hero">
+
 <h1>Hola, bienvenido a</h1>
 <h2>Sir Of All Tec</h2>
+
 <img src="logo.png" class="mainLogo">
-<div class="coming">Próximamente</div>
+
+<div class="coming">
+Próximamente
 </div>
 
-<footer>© SIROFALLTECH</footer>
-
-<!-- LOGIN -->
-
-<div class="popup" id="codePopup">
-<div class="popupHeader">
-<b>Ingresar código</b>
-<div class="closeBtn" onclick="closeCodePopup()">✕</div>
-</div>
-<input type="text" id="accessCode" placeholder="Código..." style="width:100%;padding:10px;">
-<button onclick="submitCode()" style="margin-top:10px;">Ingresar</button>
-<div id="codeMessage"></div>
 </div>
 
-<!-- INTERFAZ -->
-
-<div class="popup" id="userInterface" style="width:520px">
-<div class="popupHeader">
-<b id="uiTitle">Bienvenido</b>
-<div class="closeBtn" onclick="closeUserInterface()">✕</div>
-</div>
-<div id="uiContent"></div>
-</div>
+<footer>
+© SIROFALLTECH
+</footer>
 
 <script>
 
 /* MENU */
 
 function toggleMenu(){
-menu.classList.toggle("active");
+
+document.getElementById("menu").classList.toggle("active");
+document.getElementById("menuBtn").classList.toggle("active");
+
 }
 
 /* POPUP */
 
 function future(){
 
-popup.classList.add("show")
+let popup=document.getElementById("popup");
+let text=document.getElementById("typing");
 
-let msg="Esta función está en desarrollo. Disponible próximamente."
+popup.classList.add("show");
 
-typing.innerHTML=""
+let message="Esta sección se encuentra en desarrollo... Próximamente disponible.";
 
-let i=0
+text.innerHTML="";
+let i=0;
 
-let t=setInterval(()=>{
-typing.innerHTML+=msg[i]
-i++
-if(i>=msg.length)clearInterval(t)
-},35)
+let typing=setInterval(()=>{
+
+text.innerHTML+=message[i];
+i++;
+
+if(i>=message.length) clearInterval(typing);
+
+},35);
 
 }
 
 function closePopup(){
-popup.classList.remove("show")
+document.getElementById("popup").classList.remove("show");
 }
 
-/* LOGIN */
+/* POPUP ARRASTRABLE */
 
-let failedAttempts=0
+let popup=document.getElementById("popup");
 
-function openSessionPopup(){
-codePopup.classList.add("show")
-}
+let offsetX=0;
+let offsetY=0;
+let isDown=false;
 
-function closeCodePopup(){
-codePopup.classList.remove("show")
-}
+popup.addEventListener("mousedown",e=>{
 
-function closeUserInterface(){
-userInterface.classList.remove("show")
-}
+isDown=true;
 
-function submitCode(){
+offsetX=e.clientX-popup.offsetLeft;
+offsetY=e.clientY-popup.offsetTop;
 
-let code=accessCode.value
+});
 
-if(failedAttempts>=3){
-codeMessage.innerHTML="Sistema bloqueado temporalmente"
-return
-}
+document.addEventListener("mouseup",()=>{
 
-if(code==="07811"){
+isDown=false;
 
-let pass=prompt("Contraseña CEO")
+});
 
-if(pass==="lordall78"){
+document.addEventListener("mousemove",e=>{
 
-openUserInterface("CEO Panel")
+if(!isDown) return;
 
-closeCodePopup()
+popup.style.left=(e.clientX-offsetX)+"px";
+popup.style.top=(e.clientY-offsetY)+"px";
 
-}else{
-codeMessage.innerHTML="Contraseña incorrecta"
-}
+popup.style.transform="none";
 
-}else{
+});
 
-failedAttempts++
-codeMessage.innerHTML="Código incorrecto"
+/* MODO */
 
-}
-
-}
-
-/* INTERFAZ TECNOLOGICA */
-
-function openUserInterface(title){
-
-uiTitle.innerText=title
-
-uiContent.innerHTML=`
-
-<div>Usuario autenticado correctamente</div>
-
-<div class="techPanel">
-
-<div class="techBtn" onclick="future()">AI Lab</div>
-
-<div class="techBtn" onclick="future()">Cloud System</div>
-
-<div class="techBtn" onclick="future()">Data Center</div>
-
-<div class="techBtn" onclick="future()">Developer Console</div>
-
-<div class="techBtn" onclick="future()">Security Network</div>
-
-<div class="techBtn" onclick="future()">Robotics Lab</div>
-
-</div>
-
-`
-
-userInterface.classList.add("show")
-
-}
-
-/* MODO SISTEMA */
-
-let mode="blue"
+let mode="blue";
 
 function toggleMode(){
 
 if(mode==="blue"){
-mode="red"
-document.body.classList.add("redMode")
+
+mode="red";
+document.body.classList.add("redMode");
+
 }else{
-mode="blue"
-document.body.classList.remove("redMode")
-}
+
+mode="blue";
+document.body.classList.remove("redMode");
 
 }
 
-/* FONDO */
+}
 
-const canvas=document.getElementById("bg")
-const ctx=canvas.getContext("2d")
+/* FONDO TECNOLOGICO */
 
-canvas.width=window.innerWidth
-canvas.height=window.innerHeight
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
 
-let nodes=[]
+function resize(){
 
-for(let i=0;i<120;i++){
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+createNodes();
+
+}
+
+window.addEventListener("resize",resize);
+
+let nodes=[];
+
+function createNodes(){
+
+nodes=[];
+
+let density=(canvas.width*canvas.height)/4500;
+
+for(let i=0;i<density;i++){
 
 nodes.push({
+
 x:Math.random()*canvas.width,
 y:Math.random()*canvas.height,
 vx:(Math.random()-0.5)*0.5,
 vy:(Math.random()-0.5)*0.5
-})
+
+});
 
 }
+
+}
+
+resize();
 
 function animate(){
 
-ctx.clearRect(0,0,canvas.width,canvas.height)
+ctx.clearRect(0,0,canvas.width,canvas.height);
 
 nodes.forEach(n=>{
 
-if(mode==="red"){
-n.x+=n.vx*2
-n.y+=n.vy*2
-}else{
-n.x+=n.vx
-n.y+=n.vy
+n.x+=n.vx;
+n.y+=n.vy;
+
+if(n.x<0||n.x>canvas.width) n.vx*=-1;
+if(n.y<0||n.y>canvas.height) n.vy*=-1;
+
+ctx.beginPath();
+ctx.arc(n.x,n.y,2,0,Math.PI*2);
+ctx.fillStyle=mode==="red" ? "#ff4040" : "#00c8ff";
+ctx.fill();
+
+nodes.forEach(n2=>{
+
+let dx=n.x-n2.x;
+let dy=n.y-n2.y;
+
+let dist=Math.sqrt(dx*dx+dy*dy);
+
+if(dist<180){
+
+let depth=1-(dist/180);
+
+ctx.beginPath();
+ctx.moveTo(n.x,n.y);
+ctx.lineTo(n2.x,n2.y);
+
+ctx.strokeStyle=mode==="red"
+? "rgba(255,60,60,"+depth+")"
+: "rgba(0,200,255,"+depth+")";
+
+ctx.lineWidth=depth*2;
+
+ctx.stroke();
+
 }
 
-if(n.x<0||n.x>canvas.width)n.vx*=-1
-if(n.y<0||n.y>canvas.height)n.vy*=-1
+});
 
-ctx.beginPath()
-ctx.arc(n.x,n.y,2,0,Math.PI*2)
-ctx.fillStyle=mode==="red"?"#ff4040":"#00c8ff"
-ctx.fill()
+});
 
-})
-
-requestAnimationFrame(animate)
+requestAnimationFrame(animate);
 
 }
 
-animate()
+animate();
 
 </script>
 
 </body>
 </html>
+<!-- INICIO: AGREGAR ESTO DENTRO DE <body> DESPUÉS DEL POPUP EXISTENTE -->
+
+<!-- Popup de ingreso de código -->
+<div class="popup" id="codePopup">
+  <div class="popupHeader">
+    <b>Ingresar código de acceso</b>
+    <div class="closeBtn" onclick="closeCodePopup()">✕</div>
+  </div>
+  <input type="text" id="accessCode" placeholder="Escribe tu código..." maxlength="10" style="width:100%;padding:10px;margin-top:10px;font-size:16px;">
+  <button onclick="submitCode()" style="margin-top:10px;padding:10px 20px;cursor:pointer;background:#00c8ff;color:black;border:none;font-weight:bold;">Ingresar</button>
+  <div id="codeMessage" style="margin-top:15px;"></div>
+</div>
+
+<!-- Popup de interfaz de usuario -->
+<div class="popup" id="userInterface" style="width:500px;max-width:90%;">
+  <div class="popupHeader">
+    <b id="uiTitle">Bienvenido</b>
+    <div class="closeBtn" onclick="closeUserInterface()">✕</div>
+  </div>
+  <div id="uiContent" style="margin-top:10px;font-size:16px;"></div>
+</div>
+
+<script>
+
+// Lista de palabras ofensivas simples (puedes ampliar)
+const bannedWords = ["fuck","shit","bitch","ass","pendejo","idiota","mierda","culo","cabron"," gay"," vrg"," v" ];
+
+// Abrir popup al tocar "Sesión"
+function openSessionPopup(){
+  closePopup(); // cierra el popup anterior si está abierto
+  document.getElementById("codePopup").classList.add("show");
+  document.getElementById("accessCode").value="";
+  document.getElementById("codeMessage").innerHTML="";
+}
+
+// Cerrar popup de código
+function closeCodePopup(){
+  document.getElementById("codePopup").classList.remove("show");
+}
+
+// Cerrar popup de interfaz de usuario
+function closeUserInterface(){
+  document.getElementById("userInterface").classList.remove("show");
+}
+
+// Función para validar código
+function submitCode(){
+  let code = document.getElementById("accessCode").value.trim();
+  let msg = document.getElementById("codeMessage");
+
+  if(code==="67067"){
+    // Código especial 67067
+    openUserInterface("Belman","Belman Bienvenido a Sir Of All Tec.","Próximamente podras acceder a mas funciones no oldides tu codigo. En caso de querer un cambio de codigo manda un correo al sirofalltec@gamail.com");
+    closeCodePopup();
+  } else if(code==="52370"){
+    // Código que pide nombre clave
+    let userName = prompt("Ingresa tu nombre clave (máx 10 letras)").trim();
+    if(!userName){
+      msg.innerHTML = "Debes ingresar un nombre válido.";
+      return;
+    }
+    if(userName.length>10){
+      msg.innerHTML = "Nombre demasiado largo.";
+      return;
+    }
+    // filtro simple
+    let lowerName = userName.toLowerCase();
+    for(let word of bannedWords){
+      if(lowerName.includes(word)){
+        msg.innerHTML = "Nombre no permitido.";
+        return;
+      }
+    }
+    openUserInterface(userName,Bienvenid@ ${userName} a Sir Of All Tec.,"Próximamente podrás acceder a nuevas funciones.");
+    closeCodePopup();
+  } else if(code==="07811"){
+    // Opciones de CEO / empleado
+    let choice = prompt("Elige modo: 'CEO' o 'Empleado'").trim().toLowerCase();
+    if(choice==="empleado"){
+      openUserInterface("Aldo"," Aldo Bienvenido a Sir Of All Tec.","Próximamente podrás acceder a funciones de desarrollador.");
+      closeCodePopup();
+    } else if(choice==="ceo"){
+      let ceoPass = prompt("Ingresa contraseña de CEO:");
+      if(ceoPass==="lordall78"){
+        // Interfaz CEO avanzada
+        openUserInterface("Aldo (CEO)","Aldo Bienvenido, CEO de Sir Of All Tec.","Interfaz de administrador: aquí podrás gestionar usuarios, proyectos y más. Tendras acceso a mas cosas en un futuro");
+        closeCodePopup();
+      } else {
+        msg.innerHTML = "Contraseña incorrecta.";
+      }
+    } else {
+      msg.innerHTML = "Opción inválida.";
+    }
+  } else {
+    msg.innerHTML = "Código incorrecto.";
+  }
+}
+
+// Función para abrir popup de interfaz
+function openUserInterface(name,title,message){
+  let ui=document.getElementById("userInterface");
+  document.getElementById("uiTitle").innerText=title;
+  document.getElementById("uiContent").innerHTML="";
+  ui.classList.add("show");
+
+  // efecto typing
+  let i=0;
+  let interval=setInterval(()=>{
+    document.getElementById("uiContent").innerHTML += message.charAt(i);
+    i++;
+    if(i>=message.length) clearInterval(interval);
+  },35);
+}
+
+// Vincular "Sesión" del menú
+document.querySelectorAll(".menu a").forEach(el=>{
+  if(el.innerText.toLowerCase().includes("sesión")){
+    el.addEventListener("click", openSessionPopup);
+  }
+});
+
+</script>
