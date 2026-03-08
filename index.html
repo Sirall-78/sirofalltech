@@ -42,8 +42,6 @@ animation:glow 3s infinite alternate;
 100%{filter:drop-shadow(0 0 10px #00c8ff);}
 }
 
-.coming{margin-top:15px;font-size:20px;}
-
 .menuBtn{
 position:fixed;
 right:25px;
@@ -102,36 +100,11 @@ color:black;
 right:0;
 }
 
-.popup{
+canvas{
 position:fixed;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-width:320px;
-max-width:80%;
-background:#020617;
-border:1px solid #00c8ff;
-border-radius:10px;
-padding:20px;
-display:none;
-z-index:6;
-}
-
-.popup.show{
-display:block;
-}
-
-.popupHeader{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:10px;
-}
-
-.closeBtn{
-cursor:pointer;
-color:#00c8ff;
-font-size:18px;
+top:0;
+left:0;
+z-index:-1;
 }
 
 .redMode{
@@ -140,30 +113,6 @@ background:#0b0000;
 
 .redMode .menuBtn div{
 background:#ff4040;
-}
-
-.redMode .menu a:hover{
-background:#ff3030;
-color:white;
-}
-
-.redMode .popup{
-border:1px solid #ff3030;
-}
-
-canvas{
-position:fixed;
-top:0;
-left:0;
-z-index:-1;
-}
-
-footer{
-position:fixed;
-bottom:40px;
-width:100%;
-text-align:center;
-opacity:0.6;
 }
 
 </style>
@@ -179,7 +128,7 @@ opacity:0.6;
 
 <div class="menu" id="menu">
 <a onclick="future()">Inicio</a>
-<a onclick="openSessionPopup()">Sesión</a>
+<a onclick="future()">Sesión</a>
 <a onclick="future()">Tecnología</a>
 <a onclick="future()">Proyectos</a>
 <a onclick="future()">Contacto</a>
@@ -195,39 +144,7 @@ opacity:0.6;
 
 <img src="logo.png" class="mainLogo">
 
-<div class="coming">
-Próximamente
-</div>
-
-</div>
-
-<footer>
-© SIROFALLTECH
-</footer>
-
-<div class="popup" id="codePopup">
-
-<div class="popupHeader">
-<b>Ingresar código</b>
-<div class="closeBtn" onclick="closeCodePopup()">✕</div>
-</div>
-
-<input id="accessCode" placeholder="Código">
-
-<button onclick="submitCode()">Ingresar</button>
-
-<div id="codeMessage"></div>
-
-</div>
-
-<div class="popup" id="userInterface">
-
-<div class="popupHeader">
-<b id="uiTitle"></b>
-<div class="closeBtn" onclick="closeUserInterface()">✕</div>
-</div>
-
-<div id="uiContent"></div>
+<div>Próximamente</div>
 
 </div>
 
@@ -240,8 +157,6 @@ menu.classList.toggle("active")
 menuBtn.classList.toggle("active")
 }
 
-/* FUTURO */
-
 function future(){
 alert("Sección en desarrollo")
 }
@@ -249,164 +164,47 @@ alert("Sección en desarrollo")
 /* MODOS */
 
 let mode="blue"
-let systemMode=false
 
 function toggleMode(){
 
 if(mode==="blue"){
-
 mode="red"
-systemMode=true
 document.body.classList.add("redMode")
-
 }else{
-
 mode="blue"
-systemMode=false
 document.body.classList.remove("redMode")
-
 }
 
 }
 
-/* SESION */
-
-function openSessionPopup(){
-
-if(!systemMode){
-future()
-return
-}
-
-codePopup.classList.add("show")
-
-}
-
-function closeCodePopup(){
-codePopup.classList.remove("show")
-}
-
-function closeUserInterface(){
-userInterface.classList.remove("show")
-}
-
-/* CODIGOS */
-
-function submitCode(){
-
-let code=accessCode.value.trim()
-
-if(code==="67067"){
-
-openUserInterface(
-"Belman",
-"Belman Bienvenido",
-"Acceso concedido"
-)
-
-}
-
-else if(code==="52370"){
-
-let name=prompt("Ingresa tu nombre")
-
-if(!name) return
-
-openUserInterface(
-name,
-"Bienvenido "+name,
-"Acceso limitado"
-)
-
-}
-
-else if(code==="07811"){
-
-let pass=prompt("Contraseña CEO")
-
-if(pass==="lordall78"){
-
-openUserInterface(
-"Aldo CEO",
-"Bienvenido CEO",
-"Panel administrador"
-)
-
-}else{
-
-codeMessage.innerHTML="Contraseña incorrecta"
-
-}
-
-}
-
-else{
-
-codeMessage.innerHTML="Código incorrecto"
-
-}
-
-}
-
-/* INTERFAZ */
-
-function openUserInterface(name,title,message){
-
-uiTitle.innerText=title
-uiContent.innerText=message
-
-userInterface.classList.add("show")
-
-closeCodePopup()
-
-}
-
-/* ===== FONDO JARVIS 3D ===== */
+/* ===== CANVAS HIPERDIMENSIONAL ===== */
 
 const canvas=document.getElementById("bg")
 const ctx=canvas.getContext("2d")
 
-canvas.width=innerWidth
-canvas.height=innerHeight
+canvas.width=window.innerWidth
+canvas.height=window.innerHeight
 
 window.addEventListener("resize",()=>{
 
-canvas.width=innerWidth
-canvas.height=innerHeight
+canvas.width=window.innerWidth
+canvas.height=window.innerHeight
 
 })
 
 let nodes=[]
-let total=80
-let angle=0
+let total=70
 
 for(let i=0;i<total;i++){
 
 nodes.push({
 
-x:(Math.random()-0.5)*800,
-y:(Math.random()-0.5)*800,
-z:(Math.random()-0.5)*800,
-
-vx:(Math.random()-0.5)*0.3,
-vy:(Math.random()-0.5)*0.3,
-vz:(Math.random()-0.5)*0.3
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+vx:(Math.random()-0.5)*0.6,
+vy:(Math.random()-0.5)*0.6
 
 })
-
-}
-
-function project(n){
-
-let scale=600/(600+n.z)
-
-return{
-
-x:n.x*scale+canvas.width/2,
-y:n.y*scale+canvas.height/2,
-scale:scale
-
-}
 
 }
 
@@ -414,56 +212,68 @@ function animate(){
 
 ctx.clearRect(0,0,canvas.width,canvas.height)
 
-angle+=0.002
-
 let color=mode==="red"?"#ff4040":"#00c8ff"
 
 for(let n of nodes){
 
 n.x+=n.vx
 n.y+=n.vy
-n.z+=n.vz
 
-let cos=Math.cos(angle)
-let sin=Math.sin(angle)
-
-let x=n.x*cos-n.z*sin
-let z=n.x*sin+n.z*cos
-
-n.x=x
-n.z=z
-
-}
-
-for(let i=0;i<nodes.length;i++){
-
-let p1=project(nodes[i])
+if(n.x<0||n.x>canvas.width) n.vx*=-1
+if(n.y<0||n.y>canvas.height) n.vy*=-1
 
 ctx.beginPath()
-ctx.arc(p1.x,p1.y,2*p1.scale,0,Math.PI*2)
+ctx.arc(n.x,n.y,2,0,Math.PI*2)
 ctx.fillStyle=color
 ctx.fill()
 
+}
+
+/* CONEXIONES Y FIGURAS */
+
+for(let i=0;i<nodes.length;i++){
+
 for(let j=i+1;j<nodes.length;j++){
 
-let p2=project(nodes[j])
+let a=nodes[i]
+let b=nodes[j]
 
-let dx=p1.x-p2.x
-let dy=p1.y-p2.y
-
+let dx=a.x-b.x
+let dy=a.y-b.y
 let dist=Math.sqrt(dx*dx+dy*dy)
 
-if(dist<130){
+if(dist<160){
 
 ctx.beginPath()
-ctx.moveTo(p1.x,p1.y)
-ctx.lineTo(p2.x,p2.y)
+ctx.moveTo(a.x,a.y)
+ctx.lineTo(b.x,b.y)
 
 ctx.strokeStyle=mode==="red"
-?"rgba(255,80,80,0.25)"
-:"rgba(0,200,255,0.25)"
+?"rgba(255,80,80,0.3)"
+:"rgba(0,200,255,0.3)"
 
 ctx.stroke()
+
+/* CREAR TRIANGULOS ALEATORIOS */
+
+if(Math.random()<0.02){
+
+let k=Math.floor(Math.random()*nodes.length)
+let c=nodes[k]
+
+ctx.beginPath()
+ctx.moveTo(a.x,a.y)
+ctx.lineTo(b.x,b.y)
+ctx.lineTo(c.x,c.y)
+ctx.closePath()
+
+ctx.strokeStyle=mode==="red"
+?"rgba(255,80,80,0.15)"
+:"rgba(0,200,255,0.15)"
+
+ctx.stroke()
+
+}
 
 }
 
