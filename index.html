@@ -160,19 +160,6 @@ cursor:move;
 display:block;
 }
 
-.popupHeader{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:10px;
-}
-
-.closeBtn{
-cursor:pointer;
-color:#00c8ff;
-font-size:18px;
-}
-
 /* MODO ROJO */
 
 .redMode{
@@ -183,17 +170,39 @@ background:#0b0000;
 background:#ff4040;
 }
 
-.redMode .menu a:hover{
-background:#ff3030;
-color:white;
+/* MODO SISTEMA MORADO */
+
+.systemMode{
+background:#060018;
 }
 
-.redMode .popup{
-border:1px solid #ff3030;
+.systemMode .menuBtn div{
+background:#b300ff;
 }
 
-.redMode .mainLogo{
-filter:drop-shadow(0 0 25px #ff3030);
+.systemMode .popup{
+border:1px solid #b300ff;
+}
+
+/* CEO PANEL */
+
+.ceoPanel{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-top:15px;
+}
+
+.ceoBtn{
+background:#0a0a2a;
+border:1px solid #6a00ff;
+padding:15px;
+cursor:pointer;
+text-align:center;
+}
+
+.ceoBtn:hover{
+background:#6a00ff;
 }
 
 /* CANVAS */
@@ -216,7 +225,6 @@ opacity:0.6;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -230,7 +238,7 @@ opacity:0.6;
 <div class="menu" id="menu">
 
 <a onclick="future()">Inicio</a>
-<a onclick="future()">Sesión</a>
+<a onclick="openSessionPopup()">Sesión</a>
 <a onclick="future()">Tecnología</a>
 <a onclick="future()">Proyectos</a>
 <a onclick="future()">Contacto</a>
@@ -240,13 +248,7 @@ opacity:0.6;
 
 <div class="popup" id="popup">
 
-<div class="popupHeader">
-
 <b>Estado del sistema</b>
-
-<div class="closeBtn" onclick="closePopup()">✕</div>
-
-</div>
 
 <div id="typing"></div>
 
@@ -271,192 +273,201 @@ Próximamente
 © SIROFALLTECH
 </footer>
 
+<!-- POPUP LOGIN -->
+
+<div class="popup" id="codePopup">
+<b>Ingresar código</b>
+<input type="text" id="accessCode" placeholder="Código..." style="width:100%;padding:10px;margin-top:10px;">
+<button onclick="submitCode()" style="margin-top:10px;">Ingresar</button>
+<div id="codeMessage"></div>
+</div>
+
+<!-- INTERFAZ USUARIO -->
+
+<div class="popup" id="userInterface" style="width:500px">
+
+<b id="uiTitle"></b>
+
+<div id="uiContent"></div>
+
+</div>
+
 <script>
 
 /* MENU */
 
 function toggleMenu(){
-
-document.getElementById("menu").classList.toggle("active");
-document.getElementById("menuBtn").classList.toggle("active");
-
+menu.classList.toggle("active");
+menuBtn.classList.toggle("active");
 }
 
-/* POPUP */
+/* MENSAJE FUTURO */
 
 function future(){
 
-let popup=document.getElementById("popup");
-let text=document.getElementById("typing");
+popup.classList.add("show")
 
-popup.classList.add("show");
+let message="Esta función está en desarrollo y estará disponible próximamente."
 
-let message="Esta sección se encuentra en desarrollo... Próximamente disponible.";
+typing.innerHTML=""
 
-text.innerHTML="";
-let i=0;
+let i=0
 
-let typing=setInterval(()=>{
+let t=setInterval(()=>{
 
-text.innerHTML+=message[i];
-i++;
+typing.innerHTML+=message[i]
 
-if(i>=message.length) clearInterval(typing);
+i++
 
-},35);
+if(i>=message.length) clearInterval(t)
+
+},30)
 
 }
 
-function closePopup(){
-document.getElementById("popup").classList.remove("show");
+/* LOGIN */
+
+function openSessionPopup(){
+codePopup.classList.add("show")
 }
 
-/* POPUP ARRASTRABLE */
+/* CEO INTERFACE */
 
-let popup=document.getElementById("popup");
+function openCEO(){
 
-let offsetX=0;
-let offsetY=0;
-let isDown=false;
+uiTitle.innerText="Panel CEO"
 
-popup.addEventListener("mousedown",e=>{
+uiContent.innerHTML=`
 
-isDown=true;
+<div class="ceoPanel">
 
-offsetX=e.clientX-popup.offsetLeft;
-offsetY=e.clientY-popup.offsetTop;
+<div class="ceoBtn" onclick="future()">AI System</div>
 
-});
+<div class="ceoBtn" onclick="future()">Cloud Control</div>
 
-document.addEventListener("mouseup",()=>{
+<div class="ceoBtn" onclick="future()">Project Manager</div>
 
-isDown=false;
+<div class="ceoBtn" onclick="future()">Security Layer</div>
 
-});
+<div class="ceoBtn" onclick="future()">Developer Console</div>
 
-document.addEventListener("mousemove",e=>{
+<div class="ceoBtn" onclick="future()">Analytics</div>
 
-if(!isDown) return;
+</div>
 
-popup.style.left=(e.clientX-offsetX)+"px";
-popup.style.top=(e.clientY-offsetY)+"px";
+`
 
-popup.style.transform="none";
+userInterface.classList.add("show")
 
-});
+}
 
-/* MODO */
+/* VALIDAR CODIGO */
 
-let mode="blue";
+function submitCode(){
+
+let code=accessCode.value
+
+if(code==="07811"){
+
+let pass=prompt("Contraseña CEO")
+
+if(pass==="lordall78"){
+
+openCEO()
+
+codePopup.classList.remove("show")
+
+}
+
+}else{
+
+codeMessage.innerHTML="Código incorrecto"
+
+}
+
+}
+
+/* MODOS */
+
+let mode="blue"
 
 function toggleMode(){
 
 if(mode==="blue"){
 
-mode="red";
-document.body.classList.add("redMode");
+mode="system"
+
+document.body.classList.add("systemMode")
 
 }else{
 
-mode="blue";
-document.body.classList.remove("redMode");
+mode="blue"
+
+document.body.classList.remove("systemMode")
 
 }
 
 }
 
-/* FONDO TECNOLOGICO */
+/* FONDO */
 
-const canvas=document.getElementById("bg");
-const ctx=canvas.getContext("2d");
+const canvas=document.getElementById("bg")
+const ctx=canvas.getContext("2d")
 
-function resize(){
+canvas.width=window.innerWidth
+canvas.height=window.innerHeight
 
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
+let nodes=[]
 
-createNodes();
-
-}
-
-window.addEventListener("resize",resize);
-
-let nodes=[];
-
-function createNodes(){
-
-nodes=[];
-
-let density=(canvas.width*canvas.height)/4500;
-
-for(let i=0;i<density;i++){
+for(let i=0;i<120;i++){
 
 nodes.push({
 
 x:Math.random()*canvas.width,
 y:Math.random()*canvas.height,
-vx:(Math.random()-0.5)*0.5,
-vy:(Math.random()-0.5)*0.5
+vx:(Math.random()-0.5)*0.8,
+vy:(Math.random()-0.5)*0.8
 
-});
-
-}
+})
 
 }
-
-resize();
 
 function animate(){
 
-ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.clearRect(0,0,canvas.width,canvas.height)
 
 nodes.forEach(n=>{
 
-n.x+=n.vx;
-n.y+=n.vy;
+if(mode==="system"){
 
-if(n.x<0||n.x>canvas.width) n.vx*=-1;
-if(n.y<0||n.y>canvas.height) n.vy*=-1;
+n.x+=n.vx*2
+n.y+=n.vy*2
 
-ctx.beginPath();
-ctx.arc(n.x,n.y,2,0,Math.PI*2);
-ctx.fillStyle=mode==="red" ? "#ff4040" : "#00c8ff";
-ctx.fill();
+}else{
 
-nodes.forEach(n2=>{
-
-let dx=n.x-n2.x;
-let dy=n.y-n2.y;
-
-let dist=Math.sqrt(dx*dx+dy*dy);
-
-if(dist<180){
-
-let depth=1-(dist/180);
-
-ctx.beginPath();
-ctx.moveTo(n.x,n.y);
-ctx.lineTo(n2.x,n2.y);
-
-ctx.strokeStyle=mode==="red"
-? "rgba(255,60,60,"+depth+")"
-: "rgba(0,200,255,"+depth+")";
-
-ctx.lineWidth=depth*2;
-
-ctx.stroke();
+n.x+=n.vx
+n.y+=n.vy
 
 }
 
-});
+if(n.x<0||n.x>canvas.width)n.vx*=-1
+if(n.y<0||n.y>canvas.height)n.vy*=-1
 
-});
+ctx.beginPath()
 
-requestAnimationFrame(animate);
+ctx.arc(n.x,n.y,2,0,Math.PI*2)
+
+ctx.fillStyle=mode==="system"?"#b300ff":"#00c8ff"
+
+ctx.fill()
+
+})
+
+requestAnimationFrame(animate)
 
 }
 
-animate();
+animate()
 
 </script>
 
