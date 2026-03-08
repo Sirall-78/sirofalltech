@@ -205,6 +205,17 @@ opacity:0.6;
 <a onclick="toggleMode()">Modo Sistema</a>
 </div>
 
+<div class="popup" id="popup">
+
+<div class="popupHeader">
+<b>Estado del sistema</b>
+<div class="closeBtn" onclick="closePopup()">✕</div>
+</div>
+
+<div id="typing"></div>
+
+</div>
+
 <canvas id="bg"></canvas>
 
 <div class="hero">
@@ -224,6 +235,33 @@ Próximamente
 © SIROFALLTECH
 </footer>
 
+<!-- Popup de código -->
+
+<div class="popup" id="codePopup">
+<div class="popupHeader">
+<b>Ingresar código de acceso</b>
+<div class="closeBtn" onclick="closeCodePopup()">✕</div>
+</div>
+
+<input type="text" id="accessCode" placeholder="Escribe tu código..." maxlength="10" style="width:100%;padding:10px;margin-top:10px;font-size:16px;">
+
+<button onclick="submitCode()" style="margin-top:10px;padding:10px 20px;cursor:pointer;background:#00c8ff;color:black;border:none;font-weight:bold;">
+Ingresar
+</button>
+
+<div id="codeMessage" style="margin-top:15px;"></div>
+</div>
+
+<!-- Popup interfaz -->
+
+<div class="popup" id="userInterface" style="width:500px;max-width:90%;">
+<div class="popupHeader">
+<b id="uiTitle">Bienvenido</b>
+<div class="closeBtn" onclick="closeUserInterface()">✕</div>
+</div>
+<div id="uiContent" style="margin-top:10px;font-size:16px;"></div>
+</div>
+
 <script>
 
 /* MENU */
@@ -236,7 +274,27 @@ document.getElementById("menuBtn").classList.toggle("active");
 /* POPUP */
 
 function future(){
-alert("Esta sección se encuentra en desarrollo... Próximamente disponible.");
+
+let popup=document.getElementById("popup");
+let text=document.getElementById("typing");
+
+popup.classList.add("show");
+
+let message="Esta sección se encuentra en desarrollo... Próximamente disponible.";
+
+text.innerHTML="";
+let i=0;
+
+let typing=setInterval(()=>{
+text.innerHTML+=message[i];
+i++;
+if(i>=message.length) clearInterval(typing);
+},35);
+
+}
+
+function closePopup(){
+document.getElementById("popup").classList.remove("show");
 }
 
 /* MODO */
@@ -247,18 +305,192 @@ let systemMode=false;
 function toggleMode(){
 
 if(mode==="blue"){
+
 mode="red";
 systemMode=true;
 document.body.classList.add("redMode");
+
 }else{
+
 mode="blue";
 systemMode=false;
 document.body.classList.remove("redMode");
+
+}
+
+}
+
+/* ABRIR SESION SOLO CON MODO SISTEMA */
+
+function openSessionPopup(){
+
+if(!systemMode){
+
+future();
+return;
+
+}
+
+closePopup();
+
+document.getElementById("codePopup").classList.add("show");
+document.getElementById("accessCode").value="";
+document.getElementById("codeMessage").innerHTML="";
+
+}
+
+function closeCodePopup(){
+document.getElementById("codePopup").classList.remove("show");
+}
+
+function closeUserInterface(){
+document.getElementById("userInterface").classList.remove("show");
+}
+
+/* LISTA PALABRAS */
+
+const bannedWords=["fuck","shit","bitch","ass","pendejo","idiota","mierda","culo","cabron"," gay"," vrg"," v"];
+
+/* VALIDAR CODIGO */
+
+function submitCode(){
+
+let code=document.getElementById("accessCode").value.trim();
+let msg=document.getElementById("codeMessage");
+
+if(code==="67067"){
+
+openUserInterface(
+"Belman",
+"Belman Bienvenido a Sir Of All Tec.",
+"Próximamente podras acceder a mas funciones no oldides tu codigo. En caso de querer un cambio de codigo manda un correo al sirofalltec@gamail.com"
+);
+
+closeCodePopup();
+
+}
+
+else if(code==="52370"){
+
+let userName=prompt("Ingresa tu nombre clave (máx 10 letras)");
+
+if(!userName){
+msg.innerHTML="Debes ingresar un nombre válido.";
+return;
+}
+
+userName=userName.trim();
+
+if(userName.length>10){
+msg.innerHTML="Nombre demasiado largo.";
+return;
+}
+
+let lowerName=userName.toLowerCase();
+
+for(let word of bannedWords){
+
+if(lowerName.includes(word)){
+msg.innerHTML="Nombre no permitido.";
+return;
 }
 
 }
 
-/* ===== NUEVO PATRON LENTO CON MAS CONEXIONES ===== */
+openUserInterface(
+userName,
+`Bienvenid@ ${userName} a Sir Of All Tec.`,
+"Próximamente podrás acceder a nuevas funciones mas de forma limitada."
+);
+
+closeCodePopup();
+
+}
+
+else if(code==="07811"){
+
+let choice=prompt("Elige modo: 'CEO' o 'Empleado'");
+
+if(!choice){
+msg.innerHTML="Opción inválida.";
+return;
+}
+
+choice=choice.trim().toLowerCase();
+
+if(choice==="empleado"){
+
+openUserInterface(
+"Aldo",
+" Aldo Bienvenido a Sir Of All Tec.",
+"Próximamente podrás acceder a funciones de desarrollador."
+);
+
+closeCodePopup();
+
+}
+
+else if(choice==="ceo"){
+
+let ceoPass=prompt("Ingresa contraseña de CEO:");
+
+if(ceoPass==="lordall78"){
+
+openUserInterface(
+"Aldo (CEO)",
+"Aldo Bienvenido, CEO de Sir Of All Tec.",
+"Interfaz de administrador: aquí podrás gestionar usuarios, proyectos y más. Tendras acceso a mas cosas en un futuro"
+);
+
+closeCodePopup();
+
+}else{
+
+msg.innerHTML="Contraseña incorrecta.";
+
+}
+
+}else{
+
+msg.innerHTML="Opción inválida.";
+
+}
+
+}
+
+else{
+
+msg.innerHTML="Código incorrecto.";
+
+}
+
+}
+
+/* INTERFAZ */
+
+function openUserInterface(name,title,message){
+
+let ui=document.getElementById("userInterface");
+
+document.getElementById("uiTitle").innerText=title;
+document.getElementById("uiContent").innerHTML="";
+
+ui.classList.add("show");
+
+let i=0;
+
+let interval=setInterval(()=>{
+
+document.getElementById("uiContent").innerHTML+=message.charAt(i);
+i++;
+
+if(i>=message.length) clearInterval(interval);
+
+},35);
+
+}
+
+/* FONDO */
 
 const canvas=document.getElementById("bg");
 const ctx=canvas.getContext("2d");
@@ -276,15 +508,15 @@ let nodes=[];
 function createNodes(){
 
 nodes=[];
-let density=(canvas.width*canvas.height)/5000;
+let density=(canvas.width*canvas.height)/4500;
 
 for(let i=0;i<density;i++){
 
 nodes.push({
 x:Math.random()*canvas.width,
 y:Math.random()*canvas.height,
-vx:(Math.random()-0.5)*0.15,
-vy:(Math.random()-0.5)*0.15
+vx:(Math.random()-0.5)*0.5,
+vy:(Math.random()-0.5)*0.5
 });
 
 }
@@ -311,34 +543,6 @@ ctx.fillStyle=mode==="red" ? "#ff4040" : "#00c8ff";
 ctx.fill();
 
 });
-
-/* CONEXIONES */
-
-for(let i=0;i<nodes.length;i++){
-
-for(let j=i+1;j<nodes.length;j++){
-
-let dx=nodes[i].x-nodes[j].x;
-let dy=nodes[i].y-nodes[j].y;
-let dist=Math.sqrt(dx*dx+dy*dy);
-
-if(dist<160){
-
-ctx.beginPath();
-ctx.moveTo(nodes[i].x,nodes[i].y);
-ctx.lineTo(nodes[j].x,nodes[j].y);
-
-ctx.strokeStyle=mode==="red"
-? "rgba(255,80,80,0.25)"
-: "rgba(0,200,255,0.25)";
-
-ctx.stroke();
-
-}
-
-}
-
-}
 
 requestAnimationFrame(animate);
 
