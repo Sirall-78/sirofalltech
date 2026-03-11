@@ -220,8 +220,8 @@ footer{
 <div class="hero">
   <h1>Hola, bienvenido a</h1>
   <h2>Sir Of All Tec</h2>
-  <!-- Logo relativo compatible con GitHub Pages -->
-  <img src="./logo.png" class="mainLogo" alt="Logo">
+  <!-- Logo embebido en Base64 para GitHub Pages -->
+  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAMAAADyQd3EAAAAhFBMVEUAAAD///+qqqqtra3k5OTR0dG6urrs7OxtbW2Dg4OTk5Pq6uqurq7x8fHd3d3Ozs7i4uLr6+vZ2dnV1dWbm5vT09Obm5vX19fY2Ni1tbWnp6eioqKSkpJeXl5ERESSkpKioqK0tLRcXFyYmJiFhYViYmLS0tK7u7v////b+/w6AAAAV0lEQVR4nO3VwQ2AIBAF0La6gA4Bdu//1UHBZwwJL6sv3dvUqSKEkJAAAAAAAAAAAAgP+/YAAGbF7x/7+nn+Kp7f0aAAAAAElFTkSuQmCC" class="mainLogo">
   <div class="coming">Próximamente</div>
 </div>
 
@@ -248,17 +248,17 @@ footer{
 </div>
 
 <script>
-// =========================
-// MENU FUNCIONES
-// =========================
+/* =========================
+   MENU FUNCIONES
+   ========================= */
 function toggleMenu(){
   document.getElementById("menu").classList.toggle("active");
   document.getElementById("menuBtn").classList.toggle("active");
 }
 
-// =========================
-// POPUP FUNCIONES
-// =========================
+/* =========================
+   POPUP FUNCIONES
+   ========================= */
 function future(){
   let popup=document.getElementById("popup");
   let text=document.getElementById("typing");
@@ -273,11 +273,13 @@ function future(){
   },35);
 }
 
-function closePopup(){ document.getElementById("popup").classList.remove("show"); }
+function closePopup(){
+  document.getElementById("popup").classList.remove("show");
+}
 
-// =========================
-// MODO SISTEMA
-// =========================
+/* =========================
+   MODO SISTEMA
+   ========================= */
 let mode="blue";
 let systemMode=false;
 
@@ -293,13 +295,16 @@ function toggleMode(){
   }
 }
 
-// =========================
-// SESIÓN / LOGIN
-// =========================
+/* =========================
+   SESIÓN / LOGIN
+   ========================= */
 const bannedWords=["fuck","shit","bitch","ass","pendejo","idiota","mierda","culo","cabron"];
 
 function openSessionPopup(){
-  if(!systemMode){ future(); return; }
+  if(!systemMode){
+    future();
+    return;
+  }
   document.getElementById("codePopup").classList.add("show");
   document.getElementById("accessCode").value="";
   document.getElementById("codeMessage").innerHTML="";
@@ -308,9 +313,9 @@ function openSessionPopup(){
 function closeCodePopup(){document.getElementById("codePopup").classList.remove("show");}
 function closeUserInterface(){document.getElementById("userInterface").classList.remove("show");}
 
-// =========================
-// VALIDAR CODIGOS CON MENSAJES ESPECIFICOS
-// =========================
+/* =========================
+   VALIDAR CODIGOS CON MENSAJES ESPECIFICOS
+   ========================= */
 function submitCode(){
   let code=document.getElementById("accessCode").value.trim();
   let msg=document.getElementById("codeMessage");
@@ -319,11 +324,16 @@ function submitCode(){
     openUserInterface("Belman","Belman","Bienvenido a Sir Of All Tec. Próximamente más funciones disponibles.");
   } else if(code==="52370"){
     let userName=prompt("Ingresa tu nombre clave (máx 10 letras)");
-    if(!userName){ msg.innerHTML="Debes ingresar un nombre válido."; return; }
+    if(!userName){
+      msg.innerHTML="Debes ingresar un nombre válido.";
+      return;
+    }
     userName=userName.trim();
     if(userName.length>10){ msg.innerHTML="Nombre demasiado largo."; return; }
     let lowerName=userName.toLowerCase();
-    for(let word of bannedWords){ if(lowerName.includes(word)){ msg.innerHTML="Nombre no permitido."; return; } }
+    for(let word of bannedWords){
+      if(lowerName.includes(word)){ msg.innerHTML="Nombre no permitido."; return; }
+    }
     openUserInterface(userName,`Bienvenid@ ${userName}`, "Próximamente podrás acceder a nuevas funciones limitadas.");
   } else if(code==="07811"){
     let choice=prompt("Elige modo: 'CEO' o 'Empleado'").trim().toLowerCase();
@@ -349,9 +359,9 @@ function submitCode(){
   closeCodePopup();
 }
 
-// =========================
-// INTERFAZ DE USUARIO
-// =========================
+/* =========================
+   INTERFAZ DE USUARIO
+   ========================= */
 function openUserInterface(name,title,message){
   let ui=document.getElementById("userInterface");
   document.getElementById("uiTitle").innerText=title;
@@ -365,17 +375,20 @@ function openUserInterface(name,title,message){
   },35);
 }
 
-// =========================
-// CANVAS NODOS
-// =========================
+/* =========================
+   CANVAS NODOS
+   ========================= */
 const canvas=document.getElementById("bg");
 const ctx=canvas.getContext("2d");
 let nodes=[], rainbow=false, rainbowMixed=false, hue=0;
 let originalNodes=[]; // Guardar patrón inicial para salvar
 let mouseX=0, mouseY=0;
-let explosionActive=false;
+let isCollapsed=false, isExploded=false;
 
-window.addEventListener("mousemove", e=>{ mouseX=e.clientX; mouseY=e.clientY; });
+window.addEventListener("mousemove", e=>{
+  mouseX=e.clientX;
+  mouseY=e.clientY;
+});
 
 function resize(){
   canvas.width=window.innerWidth;
@@ -392,7 +405,9 @@ function createNodes(){
     let node={ x:Math.random()*canvas.width, y:Math.random()*canvas.height, vx:(Math.random()-0.5)*0.5, vy:(Math.random()-0.5)*0.5, colorHue:Math.random()*360 };
     nodes.push(node);
   }
+  // Nodo central
   nodes.push({ x:canvas.width/2, y:canvas.height/2, vx:0, vy:0, core:true, colorHue:Math.random()*360 });
+  // Guardar patrón original
   originalNodes=nodes.map(n=>({...n}));
 }
 
@@ -401,37 +416,54 @@ resize();
 /* =========================
    MODOS NODOS
    ========================= */
-function rainbowMode(){ rainbow=!rainbow; rainbowMixed=false; nodes.forEach(n=>{ n.vx=(Math.random()-0.5)*2; n.vy=(Math.random()-0.5)*2; }); }
-function rainbowMix(){ rainbowMixed=!rainbowMixed; rainbow=false; nodes.forEach(n=>{ n.vx=(Math.random()-0.5)*2.5; n.vy=(Math.random()-0.5)*2.5; }); }
+function rainbowMode(){
+  rainbow=!rainbow;
+  rainbowMixed=false;
+  nodes.forEach(n=>{ n.vx=(Math.random()-0.5)*2; n.vy=(Math.random()-0.5)*2; });
+}
+function rainbowMix(){
+  rainbowMixed=!rainbowMixed;
+  rainbow=false;
+  nodes.forEach(n=>{ n.vx=(Math.random()-0.5)*2.5; n.vy=(Math.random()-0.5)*2.5; });
+}
 
 /* =========================
-   COLAPSAR / RESTAURAR CON EXPLOSIÓN
+   COLAPSAR / RESTAURAR CON EXPLOSION
    ========================= */
 function collapsePattern(){
+  if(!systemMode) return;
+  isCollapsed=true;
+  isExploded=false;
+
+  // mover nodos al centro
   nodes.forEach(n=>{
     n.vx=(canvas.width/2-n.x)/50;
     n.vy=(canvas.height/2-n.y)/50;
   });
 
-  // Activar explosión 5 segundos después
+  // después de 5 segundos, hacer "explosión"
   setTimeout(()=>{
-    explosionActive=true;
-    nodes.forEach(n=>{
-      n.vx=0;
-      n.vy=0;
-    });
+    if(isCollapsed){
+      isExploded=true;
+      nodes.forEach(n=>{
+        n.vx=(Math.random()-0.5)*10;
+        n.vy=(Math.random()-0.5)*10;
+      });
+    }
   },5000);
 }
 
 function restorePattern(){
-  // Restaurar posiciones originales
+  if(!systemMode) return;
+  // reconstruir patrón original
   nodes.forEach((n,i)=>{
-    n.x=originalNodes[i].x;
-    n.y=originalNodes[i].y;
-    n.vx=originalNodes[i].vx;
-    n.vy=originalNodes[i].vy;
+    n.x = originalNodes[i].x;
+    n.y = originalNodes[i].y;
+    n.vx = originalNodes[i].vx;
+    n.vy = originalNodes[i].vy;
   });
-  explosionActive=false;
+  isCollapsed=false;
+  isExploded=false;
 }
 
 /* =========================
@@ -442,10 +474,10 @@ function animate(){
   hue+=0.5;
 
   nodes.forEach(n=>{
-    if(!explosionActive){
-      n.x+=n.vx;
-      n.y+=n.vy;
-    }
+    n.x+=n.vx;
+    n.y+=n.vy;
+
+    // rebote en bordes
     if(n.x<0||n.x>canvas.width) n.vx*=-1;
     if(n.y<0||n.y>canvas.height) n.vy*=-1;
 
@@ -462,7 +494,9 @@ function animate(){
     else{ ctx.fillStyle=mode==="red" ? "#ff4040" : "#00c8ff"; }
     ctx.fill();
 
+    // Líneas entre nodos
     nodes.forEach(n2=>{
+      if(n===n2) return;
       let dx=n.x-n2.x, dy=n.y-n2.y;
       let dist=Math.sqrt(dx*dx+dy*dy);
       if(dist<180){
@@ -478,16 +512,6 @@ function animate(){
       }
     });
   });
-
-  // Dibujar explosión
-  if(explosionActive){
-    nodes.forEach(n=>{
-      let angle=Math.random()*Math.PI*2;
-      let speed=Math.random()*4;
-      n.x+=Math.cos(angle)*speed;
-      n.y+=Math.sin(angle)*speed;
-    });
-  }
 
   requestAnimationFrame(animate);
 }
