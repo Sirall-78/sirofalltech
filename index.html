@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Sir Of All Tec</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-
 <style>
 /* =========================
    ESTILOS PRINCIPALES
@@ -181,7 +179,6 @@ footer{
 }
 </style>
 </head>
-
 <body>
 
 <!-- BOTÓN MENU -->
@@ -191,24 +188,24 @@ footer{
 
 <!-- MENU LATERAL -->
 <div class="menu" id="menu">
-  <a onclick="future()">Inicio</a>
-  <a onclick="openSessionPopup()">Sesión</a>
-  <a onclick="future()">Tecnología</a>
-  <a onclick="future()">Proyectos</a>
-  <a onclick="future()">Contacto</a>
-  <a onclick="toggleMode()">Modo Sistema</a>
+  <a id="inicioBtn">Inicio</a>
+  <a id="sesionBtn">Sesión</a>
+  <a id="tecnologiaBtn">Tecnología</a>
+  <a id="proyectosBtn">Proyectos</a>
+  <a id="contactoBtn">Contacto</a>
+  <a id="toggleModeBtn">Modo Sistema</a>
   <!-- BOTONES SOLO ACTIVOS DESPUES DE LOGIN -->
-  <a onclick="rainbowMode()" id="rainbowBtn" style="pointer-events:none;opacity:0.5;">Arcoiris</a>
-  <a onclick="rainbowMix()" id="rainbowMixBtn" style="pointer-events:none;opacity:0.5;">Arcoiris Mixto</a>
-  <a onclick="collapsePattern()" id="collapseBtn" style="pointer-events:none;opacity:0.5;">Colapsar</a>
-  <a onclick="restorePattern()" id="restoreBtn" style="pointer-events:none;opacity:0.5;">Salvar</a>
+  <a id="rainbowBtn" style="pointer-events:none;opacity:0.5;">Arcoiris</a>
+  <a id="rainbowMixBtn" style="pointer-events:none;opacity:0.5;">Arcoiris Mixto</a>
+  <a id="collapseBtn" style="pointer-events:none;opacity:0.5;">Colapsar</a>
+  <a id="restoreBtn" style="pointer-events:none;opacity:0.5;">Salvar</a>
 </div>
 
 <!-- POPUP GENERICO -->
 <div class="popup" id="popup">
   <div class="popupHeader">
     <b>Estado del sistema</b>
-    <div class="closeBtn" onclick="closePopup()">✕</div>
+    <div class="closeBtn" id="closePopupBtn">✕</div>
   </div>
   <div id="typing"></div>
 </div>
@@ -230,10 +227,10 @@ footer{
 <div class="popup" id="codePopup">
   <div class="popupHeader">
     <b>Ingresar código de acceso</b>
-    <div class="closeBtn" onclick="closeCodePopup()">✕</div>
+    <div class="closeBtn" id="closeCodePopupBtn">✕</div>
   </div>
   <input type="text" id="accessCode" placeholder="Escribe tu código..." maxlength="10" style="width:100%;padding:10px;margin-top:10px;font-size:16px;">
-  <button onclick="submitCode()" style="margin-top:10px;padding:10px 20px;cursor:pointer;background:#00c8ff;color:black;border:none;font-weight:bold;">Ingresar</button>
+  <button id="submitCodeBtn" style="margin-top:10px;padding:10px 20px;cursor:pointer;background:#00c8ff;color:black;border:none;font-weight:bold;">Ingresar</button>
   <div id="codeMessage" style="margin-top:15px;"></div>
 </div>
 
@@ -241,7 +238,7 @@ footer{
 <div class="popup" id="userInterface" style="width:500px;max-width:90%;">
   <div class="popupHeader">
     <b id="uiTitle">Bienvenido</b>
-    <div class="closeBtn" onclick="closeUserInterface()">✕</div>
+    <div class="closeBtn" id="closeUIBtn">✕</div>
   </div>
   <div id="uiContent" style="margin-top:10px;font-size:16px;"></div>
 </div>
@@ -249,178 +246,174 @@ footer{
 <script>
 document.addEventListener("DOMContentLoaded", function(){
 
-/* =========================
-   VARIABLES GLOBALES
-   ========================= */
-let mode="blue";
-let systemMode=false;
-const bannedWords=["fuck","shit","bitch","ass","pendejo","idiota","mierda","culo","cabron"];
-const canvas=document.getElementById("bg");
-const ctx=canvas.getContext("2d");
-let nodes=[], rainbow=false, rainbowMixed=false, hue=0;
-let originalNodes=[];
-let mouseX=0, mouseY=0;
-let isCollapsed=false, isExploded=false;
+  // Variables
+  let mode="blue";
+  let systemMode=false;
+  const bannedWords=["fuck","shit","bitch","ass","pendejo","idiota","mierda","culo","cabron"];
+  const canvas=document.getElementById("bg");
+  const ctx=canvas.getContext("2d");
+  let nodes=[], rainbow=false, rainbowMixed=false, hue=0;
+  let originalNodes=[];
+  let mouseX=0, mouseY=0;
+  let isCollapsed=false, isExploded=false;
 
-/* =========================
-   MENU FUNCIONES
-   ========================= */
-document.getElementById("menuBtn").addEventListener("click", toggleMenu);
-function toggleMenu(){
-  document.getElementById("menu").classList.toggle("active");
-  document.getElementById("menuBtn").classList.toggle("active");
-}
+  // MENU
+  const menuBtn=document.getElementById("menuBtn");
+  const menu=document.getElementById("menu");
+  menuBtn.addEventListener("click", ()=>{ menu.classList.toggle("active"); menuBtn.classList.toggle("active"); });
 
-/* =========================
-   POPUPS
-   ========================= */
-function future(){
-  let popup=document.getElementById("popup");
-  let text=document.getElementById("typing");
-  popup.classList.add("show");
-  let message="Esta sección se encuentra en desarrollo... Próximamente disponible.";
-  text.innerHTML="";
-  let i=0;
-  let typing=setInterval(()=>{
-    text.innerHTML+=message[i];
-    i++;
-    if(i>=message.length) clearInterval(typing);
-  },35);
-}
-function closePopup(){document.getElementById("popup").classList.remove("show");}
-function openSessionPopup(){
-  if(!systemMode){ future(); return; }
-  document.getElementById("codePopup").classList.add("show");
-  document.getElementById("accessCode").value="";
-  document.getElementById("codeMessage").innerHTML="";
-}
-function closeCodePopup(){document.getElementById("codePopup").classList.remove("show");}
-function closeUserInterface(){document.getElementById("userInterface").classList.remove("show");}
+  // POPUPS
+  const popup=document.getElementById("popup");
+  const popupTyping=document.getElementById("typing");
+  const codePopup=document.getElementById("codePopup");
+  const userInterface=document.getElementById("userInterface");
+  const codeMessage=document.getElementById("codeMessage");
 
-/* =========================
-   MODO SISTEMA
-   ========================= */
-window.toggleMode=function(){
-  if(mode==="blue"){ mode="red"; systemMode=true; document.body.classList.add("redMode"); }
-  else{ mode="blue"; systemMode=false; document.body.classList.remove("redMode"); }
-}
+  function showFuture(){
+    popup.classList.add("show");
+    let message="Esta sección se encuentra en desarrollo... Próximamente disponible.";
+    popupTyping.innerHTML="";
+    let i=0;
+    let typing=setInterval(()=>{
+      popupTyping.innerHTML+=message[i];
+      i++;
+      if(i>=message.length) clearInterval(typing);
+    },35);
+  }
 
-/* =========================
-   LOGIN
-   ========================= */
-window.submitCode=function(){
-  let code=document.getElementById("accessCode").value.trim();
-  let msg=document.getElementById("codeMessage");
-  if(code==="67067"){ openUserInterface("Belman","Belman","Bienvenido a Sir Of All Tec. Próximamente más funciones disponibles."); }
-  else if(code==="52370"){
-    let userName=prompt("Ingresa tu nombre clave (máx 10 letras)");
-    if(!userName){ msg.innerHTML="Debes ingresar un nombre válido."; return; }
-    userName=userName.trim();
-    if(userName.length>10){ msg.innerHTML="Nombre demasiado largo."; return; }
-    let lowerName=userName.toLowerCase();
-    for(let word of bannedWords){ if(lowerName.includes(word)){ msg.innerHTML="Nombre no permitido."; return; } }
-    openUserInterface(userName,`Bienvenid@ ${userName}`, "Próximamente podrás acceder a nuevas funciones limitadas.");
-  } else if(code==="07811"){
-    let choice=prompt("Elige modo: 'CEO' o 'Empleado'").trim().toLowerCase();
-    if(choice==="empleado"){ openUserInterface("Aldo","Aldo","Bienvenido a funciones de desarrollador."); }
-    else if(choice==="ceo"){
-      let ceoPass=prompt("Ingresa contraseña de CEO:");
-      if(ceoPass==="lordall78"){ openUserInterface("Aldo (CEO)","Aldo","Interfaz de administrador: gestionar usuarios, proyectos y más."); }
-      else{ msg.innerHTML="Contraseña incorrecta."; return; }
-    } else{ msg.innerHTML="Opción inválida."; return; }
-  } else{ msg.innerHTML="Código incorrecto."; return; }
+  function toggleMode(){
+    if(mode==="blue"){ mode="red"; systemMode=true; document.body.classList.add("redMode"); }
+    else{ mode="blue"; systemMode=false; document.body.classList.remove("redMode"); }
+  }
 
-  ["rainbowBtn","rainbowMixBtn","collapseBtn","restoreBtn"].forEach(id=>{
-    let el=document.getElementById(id);
-    el.style.pointerEvents="auto";
-    el.style.opacity="1";
-  });
-  closeCodePopup();
-}
-window.openUserInterface=function(name,title,message){
-  let ui=document.getElementById("userInterface");
-  document.getElementById("uiTitle").innerText=title;
-  document.getElementById("uiContent").innerHTML="";
-  ui.classList.add("show");
-  let i=0;
-  let interval=setInterval(()=>{
-    document.getElementById("uiContent").innerHTML+=message.charAt(i);
-    i++;
-    if(i>=message.length) clearInterval(interval);
-  },35);
-}
+  function openSessionPopup(){
+    if(!systemMode){ showFuture(); return; }
+    codePopup.classList.add("show");
+    document.getElementById("accessCode").value="";
+    codeMessage.innerHTML="";
+  }
 
-/* =========================
-   NODOS
-   ========================= */
-window.addEventListener("mousemove", e=>{ mouseX=e.clientX; mouseY=e.clientY; });
-function resize(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; createNodes(); }
-window.addEventListener("resize",resize);
-function createNodes(){
-  nodes=[]; 
-  let density=(canvas.width*canvas.height)/4500 + 10;
-  for(let i=0;i<density;i++){ nodes.push({ x:Math.random()*canvas.width, y:Math.random()*canvas.height, vx:(Math.random()-0.5)*0.5, vy:(Math.random()-0.5)*0.5, colorHue:Math.random()*360 }); }
-  nodes.push({ x:canvas.width/2, y:canvas.height/2, vx:0, vy:0, core:true, colorHue:Math.random()*360 });
-  originalNodes=nodes.map(n=>({...n}));
-}
-resize();
+  function closePopup(){ popup.classList.remove("show"); }
+  function closeCodePopup(){ codePopup.classList.remove("show"); }
+  function closeUserInterface(){ userInterface.classList.remove("show"); }
 
-/* MODOS */
-window.rainbowMode=function(){ rainbow=!rainbow; rainbowMixed=false; nodes.forEach(n=>{n.vx=(Math.random()-0.5)*2; n.vy=(Math.random()-0.5)*2;}); }
-window.rainbowMix=function(){ rainbowMixed=!rainbowMixed; rainbow=false; nodes.forEach(n=>{n.vx=(Math.random()-0.5)*2.5; n.vy=(Math.random()-0.5)*2.5;}); }
+  function openUserInterface(name,title,message){
+    document.getElementById("uiTitle").innerText=title;
+    document.getElementById("uiContent").innerHTML="";
+    userInterface.classList.add("show");
+    let i=0;
+    let interval=setInterval(()=>{
+      document.getElementById("uiContent").innerHTML+=message.charAt(i);
+      i++;
+      if(i>=message.length) clearInterval(interval);
+    },35);
+  }
 
-/* COLAPSAR / SALVAR */
-window.collapsePattern=function(){
-  if(!systemMode) return; isCollapsed=true; isExploded=false;
-  nodes.forEach(n=>{ n.vx=(canvas.width/2-n.x)/50; n.vy=(canvas.height/2-n.y)/50; });
-  setTimeout(()=>{
-    if(isCollapsed){ isExploded=true; nodes.forEach(n=>{ n.vx=(Math.random()-0.5)*10; n.vy=(Math.random()-0.5)*10; }); }
-  },5000);
-}
-window.restorePattern=function(){
-  if(!systemMode) return;
-  nodes.forEach((n,i)=>{ n.x=originalNodes[i].x; n.y=originalNodes[i].y; n.vx=originalNodes[i].vx; n.vy=originalNodes[i].vy; });
-  isCollapsed=false; isExploded=false;
-}
+  function submitCode(){
+    let code=document.getElementById("accessCode").value.trim();
+    codeMessage.innerHTML="";
+    if(code==="67067"){ openUserInterface("Belman","Belman","Bienvenido a Sir Of All Tec. Próximamente más funciones disponibles."); }
+    else if(code==="52370"){
+      let userName=prompt("Ingresa tu nombre clave (máx 10 letras)");
+      if(!userName){ codeMessage.innerHTML="Debes ingresar un nombre válido."; return; }
+      userName=userName.trim();
+      if(userName.length>10){ codeMessage.innerHTML="Nombre demasiado largo."; return; }
+      let lowerName=userName.toLowerCase();
+      for(let word of bannedWords){ if(lowerName.includes(word)){ codeMessage.innerHTML="Nombre no permitido."; return; } }
+      openUserInterface(userName,`Bienvenid@ ${userName}`, "Próximamente podrás acceder a nuevas funciones limitadas.");
+    } else if(code==="07811"){
+      let choice=prompt("Elige modo: 'CEO' o 'Empleado'").trim().toLowerCase();
+      if(choice==="empleado"){ openUserInterface("Aldo","Aldo","Bienvenido a funciones de desarrollador."); }
+      else if(choice==="ceo"){
+        let ceoPass=prompt("Ingresa contraseña de CEO:");
+        if(ceoPass==="lordall78"){ openUserInterface("Aldo (CEO)","Aldo","Interfaz de administrador: gestionar usuarios, proyectos y más."); }
+        else{ codeMessage.innerHTML="Contraseña incorrecta."; return; }
+      } else{ codeMessage.innerHTML="Opción inválida."; return; }
+    } else{ codeMessage.innerHTML="Código incorrecto."; return; }
 
-/* ANIMACIÓN */
-function animate(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  hue+=0.5;
-  nodes.forEach(n=>{
-    n.x+=n.vx; n.y+=n.vy;
-    if(n.x<0||n.x>canvas.width) n.vx*=-1;
-    if(n.y<0||n.y>canvas.height) n.vy*=-1;
-
-    let radius = n.core ? 4 : 2;
-    let dxMouse=n.x-mouseX, dyMouse=n.y-mouseY;
-    let distMouse=Math.sqrt(dxMouse*dxMouse+dyMouse*dyMouse);
-    let cursorEffect=distMouse<150?(150-distMouse)/150:0;
-
-    ctx.beginPath();
-    ctx.arc(n.x,n.y,radius+cursorEffect*2,0,Math.PI*2);
-    if(rainbow){ ctx.fillStyle=`hsl(${hue},100%,60%)`; }
-    else if(rainbowMixed){ ctx.fillStyle=`hsl(${n.colorHue},100%,60%)`; n.colorHue+=0.5; }
-    else{ ctx.fillStyle=mode==="red"?"#ff4040":"#00c8ff"; }
-    ctx.fill();
-
-    nodes.forEach(n2=>{
-      if(n===n2) return;
-      let dx=n.x-n2.x, dy=n.y-n2.y;
-      let dist=Math.sqrt(dx*dx+dy*dy);
-      if(dist<180){
-        let depth=1-(dist/180);
-        ctx.beginPath(); ctx.moveTo(n.x,n.y); ctx.lineTo(n2.x,n2.y);
-        if(rainbow){ ctx.strokeStyle=`hsla(${hue},100%,60%,${depth})`; }
-        else if(rainbowMixed){ ctx.strokeStyle=`hsla(${n.colorHue},100%,60%,${depth})`; }
-        else{ ctx.strokeStyle=mode==="red"?`rgba(255,60,60,${depth})`:`rgba(0,200,255,${depth})`; }
-        ctx.lineWidth=depth*2; ctx.stroke();
-      }
+    ["rainbowBtn","rainbowMixBtn","collapseBtn","restoreBtn"].forEach(id=>{
+      let el=document.getElementById(id);
+      el.style.pointerEvents="auto";
+      el.style.opacity="1";
     });
-  });
-  requestAnimationFrame(animate);
-}
-animate();
+
+    closeCodePopup();
+  }
+
+  // Asignar botones del menú
+  document.getElementById("sesionBtn").addEventListener("click", openSessionPopup);
+  document.getElementById("inicioBtn").addEventListener("click", showFuture);
+  document.getElementById("tecnologiaBtn").addEventListener("click", showFuture);
+  document.getElementById("proyectosBtn").addEventListener("click", showFuture);
+  document.getElementById("contactoBtn").addEventListener("click", showFuture);
+  document.getElementById("toggleModeBtn").addEventListener("click", toggleMode);
+  document.getElementById("closePopupBtn").addEventListener("click", closePopup);
+  document.getElementById("closeCodePopupBtn").addEventListener("click", closeCodePopup);
+  document.getElementById("closeUIBtn").addEventListener("click", closeUserInterface);
+  document.getElementById("submitCodeBtn").addEventListener("click", submitCode);
+
+  // NODOS Y ANIMACIÓN
+  window.addEventListener("mousemove", e=>{ mouseX=e.clientX; mouseY=e.clientY; });
+
+  function resize(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; createNodes(); }
+  window.addEventListener("resize",resize);
+
+  function createNodes(){
+    nodes=[];
+    let density=(canvas.width*canvas.height)/4500 + 10;
+    for(let i=0;i<density;i++){
+      nodes.push({ x:Math.random()*canvas.width, y:Math.random()*canvas.height, vx:(Math.random()-0.5)*0.5, vy:(Math.random()-0.5)*0.5, colorHue:Math.random()*360 });
+    }
+    nodes.push({ x:canvas.width/2, y:canvas.height/2, vx:0, vy:0, core:true, colorHue:Math.random()*360 });
+    originalNodes=nodes.map(n=>({...n}));
+  }
+  resize();
+
+  function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    hue+=0.5;
+
+    nodes.forEach(n=>{
+      n.x+=n.vx;
+      n.y+=n.vy;
+      if(n.x<0||n.x>canvas.width) n.vx*=-1;
+      if(n.y<0||n.y>canvas.height) n.vy*=-1;
+
+      let radius = n.core ? 4 : 2;
+      let dxMouse = n.x-mouseX, dyMouse = n.y-mouseY;
+      let distMouse = Math.sqrt(dxMouse*dxMouse + dyMouse*dyMouse);
+      let cursorEffect = distMouse<150 ? (150-distMouse)/150 : 0;
+
+      ctx.beginPath();
+      ctx.arc(n.x,n.y,radius+cursorEffect*2,0,Math.PI*2);
+
+      if(rainbow){ ctx.fillStyle=`hsl(${hue},100%,60%)`; }
+      else if(rainbowMixed){ ctx.fillStyle=`hsl(${n.colorHue},100%,60%)`; n.colorHue+=0.5; }
+      else{ ctx.fillStyle=mode==="red" ? "#ff4040" : "#00c8ff"; }
+      ctx.fill();
+
+      nodes.forEach(n2=>{
+        if(n===n2) return;
+        let dx=n.x-n2.x, dy=n.y-n2.y;
+        let dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<180){
+          let depth=1-(dist/180);
+          ctx.beginPath();
+          ctx.moveTo(n.x,n.y);
+          ctx.lineTo(n2.x,n2.y);
+          if(rainbow){ ctx.strokeStyle=`hsla(${hue},100%,60%,${depth})`; }
+          else if(rainbowMixed){ ctx.strokeStyle=`hsla(${n.colorHue},100%,60%,${depth})`; }
+          else{ ctx.strokeStyle=mode==="red" ? `rgba(255,60,60,${depth})` : `rgba(0,200,255,${depth})`; }
+          ctx.lineWidth=depth*2;
+          ctx.stroke();
+        }
+      });
+    });
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
 
 });
 </script>
