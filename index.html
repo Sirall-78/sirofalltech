@@ -185,7 +185,7 @@ footer{
 <body>
 
 <!-- BOTÓN MENU -->
-<div class="menuBtn" onclick="toggleMenu()" id="menuBtn">
+<div class="menuBtn" id="menuBtn">
   <div></div><div></div><div></div>
 </div>
 
@@ -220,8 +220,7 @@ footer{
 <div class="hero">
   <h1>Hola, bienvenido a</h1>
   <h2>Sir Of All Tec</h2>
-  <!-- Logo embebido en Base64 para GitHub Pages -->
-  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAMAAADyQd3EAAAAhFBMVEUAAAD///+qqqqtra3k5OTR0dG6urrs7OxtbW2Dg4OTk5Pq6uqurq7x8fHd3d3Ozs7i4uLr6+vZ2dnV1dWbm5vT09Obm5vX19fY2Ni1tbWnp6eioqKSkpJeXl5ERESSkpKioqK0tLRcXFyYmJiFhYViYmLS0tK7u7v////b+/w6AAAAV0lEQVR4nO3VwQ2AIBAF0La6gA4Bdu//1UHBZwwJL6sv3dvUqSKEkJAAAAAAAAAAAAgP+/YAAGbF7x/7+nn+Kp7f0aAAAAAElFTkSuQmCC" class="mainLogo">
+  <img src="logo.png" class="mainLogo">
   <div class="coming">Próximamente</div>
 </div>
 
@@ -248,16 +247,32 @@ footer{
 </div>
 
 <script>
+document.addEventListener("DOMContentLoaded", function(){
+
+/* =========================
+   VARIABLES GLOBALES
+   ========================= */
+let mode="blue";
+let systemMode=false;
+const bannedWords=["fuck","shit","bitch","ass","pendejo","idiota","mierda","culo","cabron"];
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
+let nodes=[], rainbow=false, rainbowMixed=false, hue=0;
+let originalNodes=[];
+let mouseX=0, mouseY=0;
+let isCollapsed=false, isExploded=false;
+
 /* =========================
    MENU FUNCIONES
    ========================= */
+document.getElementById("menuBtn").addEventListener("click", toggleMenu);
 function toggleMenu(){
   document.getElementById("menu").classList.toggle("active");
   document.getElementById("menuBtn").classList.toggle("active");
 }
 
 /* =========================
-   POPUP FUNCIONES
+   POPUPS
    ========================= */
 function future(){
   let popup=document.getElementById("popup");
@@ -272,97 +287,57 @@ function future(){
     if(i>=message.length) clearInterval(typing);
   },35);
 }
-
-function closePopup(){
-  document.getElementById("popup").classList.remove("show");
-}
-
-/* =========================
-   MODO SISTEMA
-   ========================= */
-let mode="blue";
-let systemMode=false;
-
-function toggleMode(){
-  if(mode==="blue"){
-    mode="red";
-    systemMode=true;
-    document.body.classList.add("redMode");
-  } else {
-    mode="blue";
-    systemMode=false;
-    document.body.classList.remove("redMode");
-  }
-}
-
-/* =========================
-   SESIÓN / LOGIN
-   ========================= */
-const bannedWords=["fuck","shit","bitch","ass","pendejo","idiota","mierda","culo","cabron"];
-
+function closePopup(){document.getElementById("popup").classList.remove("show");}
 function openSessionPopup(){
-  if(!systemMode){
-    future();
-    return;
-  }
+  if(!systemMode){ future(); return; }
   document.getElementById("codePopup").classList.add("show");
   document.getElementById("accessCode").value="";
   document.getElementById("codeMessage").innerHTML="";
 }
-
 function closeCodePopup(){document.getElementById("codePopup").classList.remove("show");}
 function closeUserInterface(){document.getElementById("userInterface").classList.remove("show");}
 
 /* =========================
-   VALIDAR CODIGOS CON MENSAJES ESPECIFICOS
+   MODO SISTEMA
    ========================= */
-function submitCode(){
+window.toggleMode=function(){
+  if(mode==="blue"){ mode="red"; systemMode=true; document.body.classList.add("redMode"); }
+  else{ mode="blue"; systemMode=false; document.body.classList.remove("redMode"); }
+}
+
+/* =========================
+   LOGIN
+   ========================= */
+window.submitCode=function(){
   let code=document.getElementById("accessCode").value.trim();
   let msg=document.getElementById("codeMessage");
-
-  if(code==="67067"){
-    openUserInterface("Belman","Belman","Bienvenido a Sir Of All Tec. Próximamente más funciones disponibles.");
-  } else if(code==="52370"){
+  if(code==="67067"){ openUserInterface("Belman","Belman","Bienvenido a Sir Of All Tec. Próximamente más funciones disponibles."); }
+  else if(code==="52370"){
     let userName=prompt("Ingresa tu nombre clave (máx 10 letras)");
-    if(!userName){
-      msg.innerHTML="Debes ingresar un nombre válido.";
-      return;
-    }
+    if(!userName){ msg.innerHTML="Debes ingresar un nombre válido."; return; }
     userName=userName.trim();
     if(userName.length>10){ msg.innerHTML="Nombre demasiado largo."; return; }
     let lowerName=userName.toLowerCase();
-    for(let word of bannedWords){
-      if(lowerName.includes(word)){ msg.innerHTML="Nombre no permitido."; return; }
-    }
+    for(let word of bannedWords){ if(lowerName.includes(word)){ msg.innerHTML="Nombre no permitido."; return; } }
     openUserInterface(userName,`Bienvenid@ ${userName}`, "Próximamente podrás acceder a nuevas funciones limitadas.");
   } else if(code==="07811"){
     let choice=prompt("Elige modo: 'CEO' o 'Empleado'").trim().toLowerCase();
-    if(choice==="empleado"){
-      openUserInterface("Aldo","Aldo","Bienvenido a funciones de desarrollador.");
-    } else if(choice==="ceo"){
+    if(choice==="empleado"){ openUserInterface("Aldo","Aldo","Bienvenido a funciones de desarrollador."); }
+    else if(choice==="ceo"){
       let ceoPass=prompt("Ingresa contraseña de CEO:");
-      if(ceoPass==="lordall78"){
-        openUserInterface("Aldo (CEO)","Aldo","Interfaz de administrador: gestionar usuarios, proyectos y más.");
-      } else{ msg.innerHTML="Contraseña incorrecta."; return; }
-    } else { msg.innerHTML="Opción inválida."; return; }
-  } else{
-    msg.innerHTML="Código incorrecto."; return;
-  }
+      if(ceoPass==="lordall78"){ openUserInterface("Aldo (CEO)","Aldo","Interfaz de administrador: gestionar usuarios, proyectos y más."); }
+      else{ msg.innerHTML="Contraseña incorrecta."; return; }
+    } else{ msg.innerHTML="Opción inválida."; return; }
+  } else{ msg.innerHTML="Código incorrecto."; return; }
 
-  // Activar botones especiales tras login
   ["rainbowBtn","rainbowMixBtn","collapseBtn","restoreBtn"].forEach(id=>{
     let el=document.getElementById(id);
     el.style.pointerEvents="auto";
     el.style.opacity="1";
   });
-
   closeCodePopup();
 }
-
-/* =========================
-   INTERFAZ DE USUARIO
-   ========================= */
-function openUserInterface(name,title,message){
+window.openUserInterface=function(name,title,message){
   let ui=document.getElementById("userInterface");
   document.getElementById("uiTitle").innerText=title;
   document.getElementById("uiContent").innerHTML="";
@@ -376,147 +351,78 @@ function openUserInterface(name,title,message){
 }
 
 /* =========================
-   CANVAS NODOS
+   NODOS
    ========================= */
-const canvas=document.getElementById("bg");
-const ctx=canvas.getContext("2d");
-let nodes=[], rainbow=false, rainbowMixed=false, hue=0;
-let originalNodes=[]; // Guardar patrón inicial para salvar
-let mouseX=0, mouseY=0;
-let isCollapsed=false, isExploded=false;
-
-window.addEventListener("mousemove", e=>{
-  mouseX=e.clientX;
-  mouseY=e.clientY;
-});
-
-function resize(){
-  canvas.width=window.innerWidth;
-  canvas.height=window.innerHeight;
-  createNodes();
-}
+window.addEventListener("mousemove", e=>{ mouseX=e.clientX; mouseY=e.clientY; });
+function resize(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; createNodes(); }
 window.addEventListener("resize",resize);
-
-/* Crear nodos */
 function createNodes(){
-  nodes=[];
+  nodes=[]; 
   let density=(canvas.width*canvas.height)/4500 + 10;
-  for(let i=0;i<density;i++){
-    let node={ x:Math.random()*canvas.width, y:Math.random()*canvas.height, vx:(Math.random()-0.5)*0.5, vy:(Math.random()-0.5)*0.5, colorHue:Math.random()*360 };
-    nodes.push(node);
-  }
-  // Nodo central
+  for(let i=0;i<density;i++){ nodes.push({ x:Math.random()*canvas.width, y:Math.random()*canvas.height, vx:(Math.random()-0.5)*0.5, vy:(Math.random()-0.5)*0.5, colorHue:Math.random()*360 }); }
   nodes.push({ x:canvas.width/2, y:canvas.height/2, vx:0, vy:0, core:true, colorHue:Math.random()*360 });
-  // Guardar patrón original
   originalNodes=nodes.map(n=>({...n}));
 }
-
 resize();
 
-/* =========================
-   MODOS NODOS
-   ========================= */
-function rainbowMode(){
-  rainbow=!rainbow;
-  rainbowMixed=false;
-  nodes.forEach(n=>{ n.vx=(Math.random()-0.5)*2; n.vy=(Math.random()-0.5)*2; });
-}
-function rainbowMix(){
-  rainbowMixed=!rainbowMixed;
-  rainbow=false;
-  nodes.forEach(n=>{ n.vx=(Math.random()-0.5)*2.5; n.vy=(Math.random()-0.5)*2.5; });
-}
+/* MODOS */
+window.rainbowMode=function(){ rainbow=!rainbow; rainbowMixed=false; nodes.forEach(n=>{n.vx=(Math.random()-0.5)*2; n.vy=(Math.random()-0.5)*2;}); }
+window.rainbowMix=function(){ rainbowMixed=!rainbowMixed; rainbow=false; nodes.forEach(n=>{n.vx=(Math.random()-0.5)*2.5; n.vy=(Math.random()-0.5)*2.5;}); }
 
-/* =========================
-   COLAPSAR / RESTAURAR CON EXPLOSION
-   ========================= */
-function collapsePattern(){
-  if(!systemMode) return;
-  isCollapsed=true;
-  isExploded=false;
-
-  // mover nodos al centro
-  nodes.forEach(n=>{
-    n.vx=(canvas.width/2-n.x)/50;
-    n.vy=(canvas.height/2-n.y)/50;
-  });
-
-  // después de 5 segundos, hacer "explosión"
+/* COLAPSAR / SALVAR */
+window.collapsePattern=function(){
+  if(!systemMode) return; isCollapsed=true; isExploded=false;
+  nodes.forEach(n=>{ n.vx=(canvas.width/2-n.x)/50; n.vy=(canvas.height/2-n.y)/50; });
   setTimeout(()=>{
-    if(isCollapsed){
-      isExploded=true;
-      nodes.forEach(n=>{
-        n.vx=(Math.random()-0.5)*10;
-        n.vy=(Math.random()-0.5)*10;
-      });
-    }
+    if(isCollapsed){ isExploded=true; nodes.forEach(n=>{ n.vx=(Math.random()-0.5)*10; n.vy=(Math.random()-0.5)*10; }); }
   },5000);
 }
-
-function restorePattern(){
+window.restorePattern=function(){
   if(!systemMode) return;
-  // reconstruir patrón original
-  nodes.forEach((n,i)=>{
-    n.x = originalNodes[i].x;
-    n.y = originalNodes[i].y;
-    n.vx = originalNodes[i].vx;
-    n.vy = originalNodes[i].vy;
-  });
-  isCollapsed=false;
-  isExploded=false;
+  nodes.forEach((n,i)=>{ n.x=originalNodes[i].x; n.y=originalNodes[i].y; n.vx=originalNodes[i].vx; n.vy=originalNodes[i].vy; });
+  isCollapsed=false; isExploded=false;
 }
 
-/* =========================
-   ANIMACIÓN
-   ========================= */
+/* ANIMACIÓN */
 function animate(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   hue+=0.5;
-
   nodes.forEach(n=>{
-    n.x+=n.vx;
-    n.y+=n.vy;
-
-    // rebote en bordes
+    n.x+=n.vx; n.y+=n.vy;
     if(n.x<0||n.x>canvas.width) n.vx*=-1;
     if(n.y<0||n.y>canvas.height) n.vy*=-1;
 
     let radius = n.core ? 4 : 2;
-    let dxMouse = n.x-mouseX, dyMouse = n.y-mouseY;
-    let distMouse = Math.sqrt(dxMouse*dxMouse + dyMouse*dyMouse);
-    let cursorEffect = distMouse<150 ? (150-distMouse)/150 : 0;
+    let dxMouse=n.x-mouseX, dyMouse=n.y-mouseY;
+    let distMouse=Math.sqrt(dxMouse*dxMouse+dyMouse*dyMouse);
+    let cursorEffect=distMouse<150?(150-distMouse)/150:0;
 
     ctx.beginPath();
     ctx.arc(n.x,n.y,radius+cursorEffect*2,0,Math.PI*2);
-
     if(rainbow){ ctx.fillStyle=`hsl(${hue},100%,60%)`; }
     else if(rainbowMixed){ ctx.fillStyle=`hsl(${n.colorHue},100%,60%)`; n.colorHue+=0.5; }
-    else{ ctx.fillStyle=mode==="red" ? "#ff4040" : "#00c8ff"; }
+    else{ ctx.fillStyle=mode==="red"?"#ff4040":"#00c8ff"; }
     ctx.fill();
 
-    // Líneas entre nodos
     nodes.forEach(n2=>{
       if(n===n2) return;
       let dx=n.x-n2.x, dy=n.y-n2.y;
       let dist=Math.sqrt(dx*dx+dy*dy);
       if(dist<180){
         let depth=1-(dist/180);
-        ctx.beginPath();
-        ctx.moveTo(n.x,n.y);
-        ctx.lineTo(n2.x,n2.y);
+        ctx.beginPath(); ctx.moveTo(n.x,n.y); ctx.lineTo(n2.x,n2.y);
         if(rainbow){ ctx.strokeStyle=`hsla(${hue},100%,60%,${depth})`; }
         else if(rainbowMixed){ ctx.strokeStyle=`hsla(${n.colorHue},100%,60%,${depth})`; }
-        else{ ctx.strokeStyle=mode==="red" ? `rgba(255,60,60,${depth})` : `rgba(0,200,255,${depth})`; }
-        ctx.lineWidth=depth*2;
-        ctx.stroke();
+        else{ ctx.strokeStyle=mode==="red"?`rgba(255,60,60,${depth})`:`rgba(0,200,255,${depth})`; }
+        ctx.lineWidth=depth*2; ctx.stroke();
       }
     });
   });
-
   requestAnimationFrame(animate);
 }
-
 animate();
+
+});
 </script>
 </body>
 </html>
