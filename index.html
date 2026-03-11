@@ -26,23 +26,19 @@ body{
   align-items:center;
   text-align:center;
 }
-
 .hero h1{font-size:38px;}
 .hero h2{font-size:30px;margin-top:10px;}
-
 .mainLogo{
   width:180px;
   margin-top:20px;
   filter:drop-shadow(0 0 15px #00c8ff);
   animation:glow 3s infinite alternate;
 }
-
 @keyframes glow{
   0%{filter:drop-shadow(0 0 10px #00c8ff);transform:scale(1);}
   50%{filter:drop-shadow(0 0 40px #00ffff);transform:scale(1.05);}
   100%{filter:drop-shadow(0 0 10px #00c8ff);transform:scale(1);}
 }
-
 .coming{margin-top:15px;font-size:20px;}
 
 /* BOTÓN MENU */
@@ -53,7 +49,6 @@ body{
   cursor:pointer;
   z-index:5;
 }
-
 .menuBtn div{
   width:30px;
   height:3px;
@@ -61,15 +56,12 @@ body{
   margin:6px 0;
   transition:0.3s;
 }
-
 .menuBtn.active div:nth-child(1){
   transform:rotate(45deg) translate(5px,5px);
 }
-
 .menuBtn.active div:nth-child(2){
   opacity:0;
 }
-
 .menuBtn.active div:nth-child(3){
   transform:rotate(-45deg) translate(6px,-6px);
 }
@@ -86,7 +78,6 @@ body{
   transition:0.4s;
   z-index:4;
 }
-
 .menu a{
   display:block;
   padding:20px;
@@ -95,12 +86,10 @@ body{
   border-bottom:1px solid rgba(255,255,255,0.1);
   cursor:pointer;
 }
-
 .menu a:hover{
   background:#00c8ff;
   color:black;
 }
-
 .menu.active{
   right:0;
 }
@@ -121,18 +110,15 @@ body{
   z-index:6;
   cursor:move;
 }
-
 .popup.show{
   display:block;
 }
-
 .popupHeader{
   display:flex;
   justify-content:space-between;
   align-items:center;
   margin-bottom:10px;
 }
-
 .closeBtn{
   cursor:pointer;
   color:#00c8ff;
@@ -143,20 +129,16 @@ body{
 .redMode{
   background:#0b0000;
 }
-
 .redMode .menuBtn div{
   background:#ff4040;
 }
-
 .redMode .menu a:hover{
   background:#ff3030;
   color:white;
 }
-
 .redMode .popup{
   border:1px solid #ff3030;
 }
-
 .redMode .mainLogo{
   filter:drop-shadow(0 0 25px #ff3030);
 }
@@ -188,13 +170,12 @@ footer{
 
 <!-- MENU LATERAL -->
 <div class="menu" id="menu">
-  <a id="inicioBtn">Inicio</a>
-  <a id="sesionBtn">Sesión</a>
-  <a id="tecnologiaBtn">Tecnología</a>
-  <a id="proyectosBtn">Proyectos</a>
-  <a id="contactoBtn">Contacto</a>
+  <a id="inicio">Inicio</a>
+  <a id="loginBtn">Sesión</a>
+  <a id="tecBtn">Tecnología</a>
+  <a id="proyBtn">Proyectos</a>
+  <a id="contactBtn">Contacto</a>
   <a id="toggleModeBtn">Modo Sistema</a>
-  <!-- BOTONES SOLO ACTIVOS DESPUES DE LOGIN -->
   <a id="rainbowBtn" style="pointer-events:none;opacity:0.5;">Arcoiris</a>
   <a id="rainbowMixBtn" style="pointer-events:none;opacity:0.5;">Arcoiris Mixto</a>
   <a id="collapseBtn" style="pointer-events:none;opacity:0.5;">Colapsar</a>
@@ -227,7 +208,7 @@ footer{
 <div class="popup" id="codePopup">
   <div class="popupHeader">
     <b>Ingresar código de acceso</b>
-    <div class="closeBtn" id="closeCodePopupBtn">✕</div>
+    <div class="closeBtn" id="closeCodeBtn">✕</div>
   </div>
   <input type="text" id="accessCode" placeholder="Escribe tu código..." maxlength="10" style="width:100%;padding:10px;margin-top:10px;font-size:16px;">
   <button id="submitCodeBtn" style="margin-top:10px;padding:10px 20px;cursor:pointer;background:#00c8ff;color:black;border:none;font-weight:bold;">Ingresar</button>
@@ -246,7 +227,6 @@ footer{
 <script>
 document.addEventListener("DOMContentLoaded", function(){
 
-  // Variables
   let mode="blue";
   let systemMode=false;
   const bannedWords=["fuck","shit","bitch","ass","pendejo","idiota","mierda","culo","cabron"];
@@ -268,6 +248,18 @@ document.addEventListener("DOMContentLoaded", function(){
   const codePopup=document.getElementById("codePopup");
   const userInterface=document.getElementById("userInterface");
   const codeMessage=document.getElementById("codeMessage");
+
+  document.getElementById("inicio").addEventListener("click", ()=>{ showFuture(); });
+  document.getElementById("tecBtn").addEventListener("click", ()=>{ showFuture(); });
+  document.getElementById("proyBtn").addEventListener("click", ()=>{ showFuture(); });
+  document.getElementById("contactBtn").addEventListener("click", ()=>{ showFuture(); });
+
+  document.getElementById("toggleModeBtn").addEventListener("click", toggleMode);
+  document.getElementById("loginBtn").addEventListener("click", openSessionPopup);
+
+  document.getElementById("closePopupBtn").addEventListener("click", ()=>{ popup.classList.remove("show"); });
+  document.getElementById("closeCodeBtn").addEventListener("click", ()=>{ codePopup.classList.remove("show"); });
+  document.getElementById("closeUIBtn").addEventListener("click", ()=>{ userInterface.classList.remove("show"); });
 
   function showFuture(){
     popup.classList.add("show");
@@ -292,10 +284,6 @@ document.addEventListener("DOMContentLoaded", function(){
     document.getElementById("accessCode").value="";
     codeMessage.innerHTML="";
   }
-
-  function closePopup(){ popup.classList.remove("show"); }
-  function closeCodePopup(){ codePopup.classList.remove("show"); }
-  function closeUserInterface(){ userInterface.classList.remove("show"); }
 
   function openUserInterface(name,title,message){
     document.getElementById("uiTitle").innerText=title;
@@ -337,25 +325,17 @@ document.addEventListener("DOMContentLoaded", function(){
       el.style.opacity="1";
     });
 
-    closeCodePopup();
+    codePopup.classList.remove("show");
   }
 
-  // Asignar botones del menú
-  document.getElementById("sesionBtn").addEventListener("click", openSessionPopup);
-  document.getElementById("inicioBtn").addEventListener("click", showFuture);
-  document.getElementById("tecnologiaBtn").addEventListener("click", showFuture);
-  document.getElementById("proyectosBtn").addEventListener("click", showFuture);
-  document.getElementById("contactoBtn").addEventListener("click", showFuture);
-  document.getElementById("toggleModeBtn").addEventListener("click", toggleMode);
-  document.getElementById("closePopupBtn").addEventListener("click", closePopup);
-  document.getElementById("closeCodePopupBtn").addEventListener("click", closeCodePopup);
-  document.getElementById("closeUIBtn").addEventListener("click", closeUserInterface);
   document.getElementById("submitCodeBtn").addEventListener("click", submitCode);
 
-  // NODOS Y ANIMACIÓN
-  window.addEventListener("mousemove", e=>{ mouseX=e.clientX; mouseY=e.clientY; });
-
-  function resize(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; createNodes(); }
+  // CANVAS
+  function resize(){
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+    createNodes();
+  }
   window.addEventListener("resize",resize);
 
   function createNodes(){
@@ -369,41 +349,60 @@ document.addEventListener("DOMContentLoaded", function(){
   }
   resize();
 
+  document.getElementById("rainbowBtn").addEventListener("click", ()=>{
+    rainbow=!rainbow; rainbowMixed=false;
+    nodes.forEach(n=>{ n.vx=(Math.random()-0.5)*2; n.vy=(Math.random()-0.5)*2; });
+  });
+
+  document.getElementById("rainbowMixBtn").addEventListener("click", ()=>{
+    rainbowMixed=!rainbowMixed; rainbow=false;
+    nodes.forEach(n=>{ n.vx=(Math.random()-0.5)*2.5; n.vy=(Math.random()-0.5)*2.5; });
+  });
+
+  document.getElementById("collapseBtn").addEventListener("click", ()=>{
+    if(!systemMode) return;
+    isCollapsed=true; isExploded=false;
+    nodes.forEach(n=>{ n.vx=(canvas.width/2-n.x)/50; n.vy=(canvas.height/2-n.y)/50; });
+    setTimeout(()=>{
+      if(isCollapsed){ isExploded=true; nodes.forEach(n=>{ n.vx=(Math.random()-0.5)*10; n.vy=(Math.random()-0.5)*10; }); }
+    },5000);
+  });
+
+  document.getElementById("restoreBtn").addEventListener("click", ()=>{
+    if(!systemMode) return;
+    nodes.forEach((n,i)=>{ n.x=originalNodes[i].x; n.y=originalNodes[i].y; n.vx=originalNodes[i].vx; n.vy=originalNodes[i].vy; });
+    isCollapsed=false; isExploded=false;
+  });
+
+  window.addEventListener("mousemove", e=>{ mouseX=e.clientX; mouseY=e.clientY; });
+
   function animate(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     hue+=0.5;
 
     nodes.forEach(n=>{
-      n.x+=n.vx;
-      n.y+=n.vy;
+      n.x+=n.vx; n.y+=n.vy;
       if(n.x<0||n.x>canvas.width) n.vx*=-1;
       if(n.y<0||n.y>canvas.height) n.vy*=-1;
-
-      let radius = n.core ? 4 : 2;
-      let dxMouse = n.x-mouseX, dyMouse = n.y-mouseY;
-      let distMouse = Math.sqrt(dxMouse*dxMouse + dyMouse*dyMouse);
-      let cursorEffect = distMouse<150 ? (150-distMouse)/150 : 0;
-
+      let radius=n.core?4:2;
+      let dxMouse=n.x-mouseX, dyMouse=n.y-mouseY;
+      let distMouse=Math.sqrt(dxMouse*dxMouse + dyMouse*dyMouse);
+      let cursorEffect=distMouse<150?(150-distMouse)/150:0;
       ctx.beginPath();
       ctx.arc(n.x,n.y,radius+cursorEffect*2,0,Math.PI*2);
-
-      if(rainbow){ ctx.fillStyle=`hsl(${hue},100%,60%)`; }
+      if(rainbow) ctx.fillStyle=`hsl(${hue},100%,60%)`;
       else if(rainbowMixed){ ctx.fillStyle=`hsl(${n.colorHue},100%,60%)`; n.colorHue+=0.5; }
-      else{ ctx.fillStyle=mode==="red" ? "#ff4040" : "#00c8ff"; }
+      else ctx.fillStyle=mode==="red"? "#ff4040":"#00c8ff";
       ctx.fill();
-
       nodes.forEach(n2=>{
         if(n===n2) return;
-        let dx=n.x-n2.x, dy=n.y-n2.y;
-        let dist=Math.sqrt(dx*dx+dy*dy);
+        let dx=n.x-n2.x, dy=n.y-n2.y, dist=Math.sqrt(dx*dx+dy*dy);
         if(dist<180){
           let depth=1-(dist/180);
-          ctx.beginPath();
-          ctx.moveTo(n.x,n.y);
-          ctx.lineTo(n2.x,n2.y);
-          if(rainbow){ ctx.strokeStyle=`hsla(${hue},100%,60%,${depth})`; }
-          else if(rainbowMixed){ ctx.strokeStyle=`hsla(${n.colorHue},100%,60%,${depth})`; }
-          else{ ctx.strokeStyle=mode==="red" ? `rgba(255,60,60,${depth})` : `rgba(0,200,255,${depth})`; }
+          ctx.beginPath(); ctx.moveTo(n.x,n.y); ctx.lineTo(n2.x,n2.y);
+          if(rainbow) ctx.strokeStyle=`hsla(${hue},100%,60%,${depth})`;
+          else if(rainbowMixed) ctx.strokeStyle=`hsla(${n.colorHue},100%,60%,${depth})`;
+          else ctx.strokeStyle=mode==="red"? `rgba(255,60,60,${depth})`:`rgba(0,200,255,${depth})`;
           ctx.lineWidth=depth*2;
           ctx.stroke();
         }
@@ -412,9 +411,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
     requestAnimationFrame(animate);
   }
-
   animate();
-
 });
 </script>
 </body>
